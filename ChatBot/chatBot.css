@@ -1,0 +1,151 @@
+@font-face {
+    font-family: 'neurimboGothicRegular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/neurimboGothicRegular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.main {
+    position: relative;
+    width: 402px;
+    height: 874px;
+    flex-shrink: 0;
+    background: linear-gradient(to bottom right, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) top right / 50% 50% no-repeat, linear-gradient(to bottom right, #352727 0%, #1A1A1A 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #352727 0%, #1A1A1A 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #352727 0%, #1A1A1A 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #352727 0%, #1A1A1A 50%) top right / 50% 50% no-repeat;
+}
+
+
+#helloP {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+#helloP>img {
+    margin: 73px 0 20px 0;
+}
+
+#helloP>h1 {
+    color: #DEDDE0;
+    text-align: center;
+    font-family: 'neurimboGothicRegular';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px;
+    /* 112.5% */
+}
+
+#helloP>p {
+    color: #7B7B7B;
+    text-align: center;
+    font-family: 'Pretendard-Regular';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px;
+    margin: 5px 0px 36px 0px;
+    /* 192.857% */
+}
+
+#bestQ {
+    margin: 0 25px 0 35px;
+}
+
+#bestQ>p {
+    color: #DEDDE0;
+    font-family: 'Pretendard-Regular';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 27px;
+    margin-bottom: 8px;
+    /* 168.75% */
+}
+
+#bestQ>button {
+    color: #DEDDE0;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px;
+    /* 192.857% */
+    padding: 0 10px;
+    margin-right: 10px;
+    margin-bottom: 11px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    border: 1px solid rgba(166, 166, 166, 0.50);
+    background: linear-gradient(90deg, rgba(47, 47, 47, 0.70) 0%, rgba(67, 67, 67, 0.70) 100%);
+}
+
+#chatP {
+    overflow-y: scroll;
+    height: 719px;
+}
+
+header {
+    color: #DEDDE0;
+    font-family: 'Pretendard-Regular';
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 74px;
+    text-align: center;
+    width: 402px;
+    height: 74px;
+    flex-shrink: 0;
+    border: 0px;
+    border-bottom: 1px solid #404040;
+    background: linear-gradient(90deg, rgba(135, 127, 127, 0.31) -30.68%, rgba(47, 47, 47, 0.90) 13.3%, rgba(135, 127, 127, 0.59) 100%);
+    position: fixed;
+}
+
+section {
+    margin-top: 74px;
+}
+
+footer {
+    position: fixed;
+    top: 793px;
+    width: 402px;
+    height: 81px;
+    display: flex;
+    justify-content: center;
+}
+
+input {
+    width: 356px;
+    height: 43px;
+    flex-shrink: 0;
+    border-radius: 21.5px;
+    border: 1px solid rgba(166, 166, 166, 0.50);
+    background: linear-gradient(90deg, rgba(47, 47, 47, 0.70) 0%, rgba(67, 67, 67, 0.70) 100%);
+    color: #DEDDE0;
+    font-family: 'Pretendard-Regular';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.none {
+    display: none;
+}
