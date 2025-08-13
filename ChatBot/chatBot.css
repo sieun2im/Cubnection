@@ -98,7 +98,13 @@ body {
 
 #chatP {
     overflow-y: scroll;
-    height: 719px;
+    height: 710px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-top: 47px;
+    padding-bottom: 29px;
+    box-sizing: border-box;
 }
 
 header {
@@ -147,5 +153,79 @@ input {
 }
 
 .none {
-    display: none;
+    display: none !important;
+}
+
+
+
+
+
+.userM {
+    align-self: flex-end;
+    margin-right: 26px;
+}
+
+.botM {
+    display: flex;
+
+    align-self: flex-start;
+    margin-left: 22px;
+    align-items: end;
+}
+
+.botM>img {
+    width: 53px;
+    height: 53px;
+    margin-right: 14px;
+    margin-bottom: 26px;
+}
+
+.textU {
+    max-width: 200px;
+    flex-shrink: 0;
+    border-radius: 24px 24px 4px 24px;
+    border: 1px solid rgba(166, 166, 166, 0.50);
+    background: linear-gradient(90deg, rgba(47, 47, 47, 0.70) 0%, rgba(67, 67, 67, 0.70) 100%);
+    color: #DEDDE0;
+    font-family: 'Pretendard-Regular';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    /* 192.857% */
+    padding: 12px 16px;
+    box-sizing: border-box;
+
+}
+
+.textB {
+    max-width: 240px;
+    height: 100px;
+    flex-shrink: 0;
+    border-radius: 24px 24px 24px 4px;
+    background: linear-gradient(90deg, rgba(230, 223, 250, 0.50) 0%, rgba(246, 227, 255, 0.50) 100%), #D9D9D9;
+    color: #221E1E;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    /* 142.857% */
+    letter-spacing: 0.25px;
+    padding: 12px 16px;
+    box-sizing: border-box;
+}
+
+.date {
+    color: var(--Light-Gray-7, #757575);
+
+    /* Body/Small */
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    /* 133.333% */
+    letter-spacing: 0.4px;
+    margin: 8px 0 0 16px;
 }
