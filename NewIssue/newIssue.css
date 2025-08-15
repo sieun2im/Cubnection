@@ -1,0 +1,261 @@
+@font-face {
+    font-family: 'neurimboGothicRegular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/neurimboGothicRegular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+
+
+
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+
+
+
+
+
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.main {
+    position: relative;
+    width: 402px;
+    height: 874px;
+    flex-shrink: 0;
+    background: linear-gradient(to bottom right, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) top right / 50% 50% no-repeat, linear-gradient(to bottom right, #352727 0%, #1A1A1A 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #352727 0%, #1A1A1A 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #352727 0%, #1A1A1A 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #352727 0%, #1A1A1A 50%) top right / 50% 50% no-repeat;
+}
+
+header {
+    display: flex;
+    width: 402px;
+    height: 102px;
+    flex-shrink: 0;
+    position: fixed;
+    padding: 34px 0 0 20px;
+    box-sizing: border-box;
+}
+
+header h1 {
+    color: #DEDDE0;
+    font-family: 'neurimboGothicRegular';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+header p {
+    color: #9A9A9A;
+    font-family: 'Pretendard-Regular';
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+
+.issuesPage {
+    overflow-y: scroll;
+    height: 772px;
+
+    margin-top: 102px;
+
+}
+
+.issues {
+    height: 192px;
+    width: 402px;
+    box-sizing: border-box;
+    padding: 18px 20px;
+    display: flex;
+    gap: 17px;
+}
+
+.issueImg {
+    height: 156px;
+    width: 116px;
+    border-radius: 14px;
+    background: linear-gradient(188deg, rgba(0, 0, 0, 0.00) 24.51%, rgba(0, 0, 0, 0.80) 88.46%), url(<path-to-image>) lightgray 50% / cover no-repeat;
+}
+
+.issueText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+}
+
+.issueText>h2 {
+    color: #DEDDE0;
+    font-family: Pretendard;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+
+.issueText>h3 {
+    color: #DEDDE0;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+
+.issueText>p {
+    color: #7B7B7B;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    width: 229px;
+    /* 166.667% */
+}
