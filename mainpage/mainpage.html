@@ -1,0 +1,129 @@
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>시장통 메인</title>
+    <link rel="stylesheet" href="mainpagereset.css" />
+    <link rel="stylesheet" href="mainpage.css" />
+    </head>
+    <body>
+    <main class="stage">
+    <section class="screen">
+        <header class="hero">
+        <h1 class="app-title">시장통!</h1>
+        <p class="app-sub">성남시전통시장</p>
+        <button class="ask" type="button">
+            <img src="../img/Group9.svg" alt="" class="ask-icon" />
+            <span>무엇을 물어볼까요?</span>
+        </button>
+        </header>
+
+        <!-- 섹션: 구경 GO! (탭 포함) -->
+        <section class="section">
+        <div class="section-head">
+            <h2>성남시 시장통 구경 GO!</h2>
+
+            <!-- 탭: 전통시장 활성 / 재래시장 비활성  -->
+            <div class="tabs">
+            <!-- 전통시장: 활성 + Group4.svg 밑줄 -->
+            <button class="tab active" type="button" onclick="location.href='mainpage.html'">
+                전통시장
+                <img src="../img/Group4.svg" alt="" class="tab-underline">
+            </button>
+
+            <!-- 재래시장: 비활성 + 클릭 시 mainpage2.html 이동 -->
+            <button class="tab" type="button" onclick="location.href='mainpage2.html'">
+                재래시장
+                <img src="../img/Group4(1).svg" alt="" class="tab-underline">
+            </button>
+            </div>
+        </div>
+
+        <div class="carousel">
+            <div class="track">
+            <article class="card-lg" data-link="../chatpage/chatpage.html">
+                <img src="Rectangle1.png" alt="" />
+                <div class="overlay">전국에서 가장 큰 규모의 민속 5일장<br />모란민속5일장</div>
+            </article>
+
+            <article class="card-lg" data-link="../chatpage/chatpage.html">
+                <img src="Rectangle2.png" alt="" />
+                <div class="overlay">중앙시장<br />성남중앙지하상가</div>
+            </article>
+
+            <article class="card-lg" data-link="../chatpage/chatpage.html">
+                <img src="Rectangle7.png" alt="" />
+                <div class="overlay">모란꽃시장<br />주말장터</div>
+            </article>
+            </div>
+
+            <!-- 페이지 도트/화살표 -->
+            <div class="carousel-dots" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="52" height="8" viewBox="0 0 52 8" fill="none">
+                <circle cx="14.5605" cy="4" r="3" fill="#716F79"/>
+                <circle cx="25.5605" cy="4" r="3" fill="#716F79"/>
+                <circle cx="36.5605" cy="4" r="3" fill="#E8E4EB"/>
+                <path d="M51.1211 3.85352L47.2676 7.70703L46.5605 7L49.707 3.85352L46.5605 0.707031L47.2676 0L51.1211 3.85352Z" fill="#7B7B7B"/>
+                <path d="M0 3.85352L3.85352 7.70703L4.56055 7L1.41406 3.85352L4.56055 0.707031L3.85352 0L0 3.85352Z" fill="#7B7B7B"/>
+            </svg>
+            </div>
+        </div>
+        </section>
+
+        <!-- 섹션: 혜택 리스트 (제목 오른쪽에 더보기) -->
+        <section class="section">
+        <div class="section-head2">
+            <div class="title-row">
+            <h2>성남시 시장통 구경 GO!</h2>
+            <a class="more" href="#">더보기 ›</a>
+            </div>
+        </div>
+
+        <!-- 혜택 전체를 클릭 이동시키고 싶으면 data-link 유지 -->
+        <ul class="benefits" data-link="../chatpage/chatpage.html">
+            <li class="benefit">
+            <img src="Rectangle7.png" alt="" />
+            <div class="b-text">
+                <strong>온누리상품권 추가 할인</strong> <br />
+                <span class="sub">온누리상품권 사용시 <b>15%</b> 할인</span>
+                <p>온누리 상품권은 구매 시 할인 혜택을 받을 수 있습니다. 지류 상품권은 5% 할인된 금액으로 구매 가능하며, 디지털 상품권은 10% 할인된 금액으로 구매할 수 있습니다.</p>
+            </div>
+            </li>
+
+            <li class="benefit">
+            <img src="Rectangle8.png" alt="" />
+            <div class="b-text">
+                <strong>성남사랑상품권 페이백</strong> <br />
+                <span class="sub">일정 금액 이상 사용 시 <b>캐시백</b> 제공</span>
+                <p>온누리 상품권은 구매 시 할인 혜택을 받을 수 있습니다. 지류 상품권은 5% 할인된 금액으로 구매 가능하며, 디지털 상품권은 10% 할인된 금액으로 구매할 수 있습니다.</p>
+            </div>
+            </li>
+        </ul>
+        </section>
+
+        <!-- 하단 캡슐형 래퍼 + 동그란 버튼 -->
+        <div class="bottom-bar">
+        <button class="speech-bubble" type="button">
+            <img src="../img/Group9.svg" alt="음성" class="mic-icon" />
+        </button>
+        </div>
+    </section>
+    </main>
+
+    <!-- 메인 스크립트(클릭 이동 등) -->
+    <script src="mainpage.js"></script>
+
+    <!-- 안전장치: 활성 탭 외 밑줄 숨김 (CSS가 처리하지만 중복 방지) -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.tabs .tab').forEach(btn => {
+        if (!btn.classList.contains('active')) {
+        const u = btn.querySelector('.tab-underline');
+        if (u) u.style.display = 'none';
+        }
+    });
+    });
+    </script>
+    </body>
+    </html>
