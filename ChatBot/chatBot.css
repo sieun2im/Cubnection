@@ -137,7 +137,8 @@ footer {
     justify-content: center;
 }
 
-input {
+input,
+.textDiv {
     width: 356px;
     height: 43px;
     flex-shrink: 0;
@@ -150,6 +151,16 @@ input {
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    padding: 13px 19px 13px 19px;
+    box-sizing: border-box;
+    word-break: break-word;
+
+}
+
+textarea {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .none {
@@ -163,6 +174,7 @@ input {
 .userM {
     align-self: flex-end;
     margin-right: 26px;
+
 }
 
 .botM {
@@ -196,11 +208,11 @@ input {
     padding: 12px 16px;
     box-sizing: border-box;
 
+    word-break: break-word;
 }
 
 .textB {
     max-width: 240px;
-    height: 100px;
     flex-shrink: 0;
     border-radius: 24px 24px 24px 4px;
     background: linear-gradient(90deg, rgba(230, 223, 250, 0.50) 0%, rgba(246, 227, 255, 0.50) 100%), #D9D9D9;
@@ -214,6 +226,7 @@ input {
     letter-spacing: 0.25px;
     padding: 12px 16px;
     box-sizing: border-box;
+    word-break: break-word;
 }
 
 .date {
