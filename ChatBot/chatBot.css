@@ -25,7 +25,9 @@ body {
     height: 874px;
     flex-shrink: 0;
     background: linear-gradient(to bottom right, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) top right / 50% 50% no-repeat, linear-gradient(to bottom right, #352727 0%, #1A1A1A 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #352727 0%, #1A1A1A 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #352727 0%, #1A1A1A 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #352727 0%, #1A1A1A 50%) top right / 50% 50% no-repeat;
+
 }
+
 
 
 #helloP {
@@ -105,7 +107,14 @@ body {
     padding-top: 47px;
     padding-bottom: 29px;
     box-sizing: border-box;
+    -ms-overflow-style: none;
 }
+
+
+#chatP::-webkit-scrollbar {
+    display: none;
+}
+
 
 header {
     color: #DEDDE0;

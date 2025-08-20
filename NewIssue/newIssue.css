@@ -169,6 +169,7 @@ body {
     background: linear-gradient(to bottom right, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, rgba(109, 77, 77, 0.40) 0%, rgba(26, 26, 26, 0.40) 50%) top right / 50% 50% no-repeat, linear-gradient(to bottom right, #352727 0%, #1A1A1A 50%) bottom right / 50% 50% no-repeat, linear-gradient(to bottom left, #352727 0%, #1A1A1A 50%) bottom left / 50% 50% no-repeat, linear-gradient(to top left, #352727 0%, #1A1A1A 50%) top left / 50% 50% no-repeat, linear-gradient(to top right, #352727 0%, #1A1A1A 50%) top right / 50% 50% no-repeat;
 }
 
+
 header {
     display: flex;
     width: 402px;
@@ -195,6 +196,7 @@ header p {
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
 }
 
 
@@ -203,8 +205,15 @@ header p {
     height: 772px;
 
     margin-top: 102px;
+    -ms-overflow-style: none;
 
 }
+
+
+.issuesPage::-webkit-scrollbar {
+    display: none;
+}
+
 
 .issues {
     height: 192px;
@@ -225,8 +234,7 @@ header p {
 .issueText {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 4px;
+    margin: 10px 0;
 }
 
 .issueText>h2 {
@@ -236,6 +244,7 @@ header p {
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    margin-bottom: 4px;
 }
 
 
@@ -258,4 +267,17 @@ header p {
     line-height: 20px;
     width: 229px;
     /* 166.667% */
+    display: flex;
+    height: 95px;
+    align-items: center;
+}
+
+button {
+    width: 10px;
+    height: 17px;
+    flex-shrink: 0;
+    border: 0;
+    background-color: transparent;
+    margin-right: 17px;
+    margin-top: 11px;
 }
