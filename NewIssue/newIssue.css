@@ -154,12 +154,32 @@ table {
 
 
 
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: #fff;
+    font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, Arial, sans-serif;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+}
+
+/* 
 body {
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-}
+} */
 
 .main {
     position: relative;
