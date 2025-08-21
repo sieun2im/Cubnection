@@ -1,10 +1,10 @@
-@font-face {
+    @font-face {
     font-family: 'neurimboGothicRegular';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-01@1.0/neurimboGothicRegular.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
     }
-@font-face {
+    @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
     font-weight: 400;
@@ -18,9 +18,10 @@
     font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, Arial, sans-serif;
     color: #fff;
     display: grid;
-    place-items: center;  
-    overflow: hidden;
+    place-items: center;
+    overflow: hidden; 
     }
+    .stage { width: 100%; height: 100%; display: grid; place-items: center; }
     .screen {
     position: relative;
     width: 402px;
@@ -34,14 +35,24 @@
         linear-gradient(to bottom left,  #352727 0%, #1A1A1A 50%) bottom left  / 50% 50% no-repeat,
         linear-gradient(to top left,     #352727 0%, #1A1A1A 50%) top left     / 50% 50% no-repeat,
         linear-gradient(to top right,    #352727 0%, #1A1A1A 50%) top right    / 50% 50% no-repeat;
-    overflow: hidden;
+    overflow: hidden; 
     }
-    .hero,
-    .section { padding-left: 20px; padding-right: 20px; }
+    .scroll-area {
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding: 0 20px 160px;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+    .hero, .section { padding-left: 0; padding-right: 0; } 
     .hero { position: relative; height: 178px; padding-top: 0; padding-bottom: 0; }
     .app-title{
     position: absolute;
-    top: 30px; left: 20px;
+    top: 30px; left: 0;
     margin: 0;
     width: 108px; height: 59px;
     color: #DEDDE0;
@@ -50,7 +61,7 @@
     }
     .app-sub{
     position: absolute;
-    top: 73px; left: 20px;  
+    top: 73px; left: 0;
     margin: 0;
     color: #9A9A9A;
     font-family: 'Pretendard-Regular', Pretendard, sans-serif;
@@ -58,63 +69,50 @@
     }
     .ask{
     position: absolute;
-    top: 112px; left: 20px;       
-    width: 362px; height: 48px;      
+    top: 112px; left: 0;
+    width: calc(100%); height: 48px;
     display: flex; align-items: center; gap: 10px;
     padding: 0 16px;
     border-radius: 21.5px;
     border: 1px solid rgba(166, 166, 166, 0.50);
     background: linear-gradient(90deg, rgba(47, 47, 47, 0.70) 0%, rgba(67, 67, 67, 0.70) 100%);
-    color: #DEdDE0; font-size: 12px;
+    color: #DEDDE0; font-size: 12px;
     margin-bottom: 39px;
     }
     .ask-icon{ width: 21px; height: 24px; }
-    /* ===== 섹션 헤더 ===== */
     .section { padding-top: 0; }
     .section-head {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 3px;
     padding: 0 0 10px 0;
     }
-    .title-row{                         
+    .title-row{
     display: flex;
     align-items: center;
     justify-content: space-between;
     }
-    .section-head h2 { 
-    color: #DEDDE0;
-    font-family: "neurimbo Gothic", "neurimboGothicRegular", sans-serif;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal; 
-    margin: 0;
-    position: relative;
-    top: 5px;
-    }
+    .section-head h2,
     .section-head2 h2 {
     color: #DEDDE0;
     font-family: "neurimbo Gothic", "neurimboGothicRegular", sans-serif;
     font-size: 24px;
-    font-style: normal;
     font-weight: 400;
-    line-height: normal; 
+    line-height: normal;
     margin: 0;
-    position: relative;
-    top: 8px;
     }
+    .section-head h2 { position: relative; top: 5px; }
+    .section-head2 h2 { position: relative; top: 8px; }
     .section-head2 .more {
     color: #7B7B7B;
     font-family: Pretendard;
     font-size: 12px;
-    font-style: normal;
     font-weight: 400;
     line-height: 20px;
     text-decoration: none;
     cursor: pointer;
-    margin: 0;            
-    position: relative;    
+    margin: 0;
+    position: relative;
     top: 12px;
     }
     :root { --tab-gap: 19px; }
@@ -129,25 +127,25 @@
     }
     .tab{
     position:relative;
-    display:inline-flex;       
+    display:inline-flex;
     align-items:center;
     background:transparent;
     border:none;
     color:#DEDDE0;
     font-size:15px;
     cursor:pointer;
-    padding:0 0 8px 0;         
+    padding:0 0 8px 0;
     line-height:1;
     white-space:nowrap;
     }
     .tab .tab-underline{
     position:absolute;
-    left:0;                    
-    bottom:0;                 
+    left:0;
+    bottom:0;
     width:123px;
     height:2px;
-    display:none;          
-    pointer-events:none;     
+    display:none;
+    pointer-events:none;
     }
     .tab.active{ color:#fff; }
     .tab.active .tab-underline{ display:block; }
@@ -161,17 +159,13 @@
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     padding-left: 0;
-    padding-right: 87px;        
-    scroll-padding-left: 0;    
+    padding-right: 87px;
+    scroll-padding-left: 0;
     }
     .track::-webkit-scrollbar{ display:none; }
     .track{
-    -webkit-mask-image: linear-gradient(to right,
-        transparent 0, black 16px,
-        black calc(100% - 16px), transparent 100%);
-            mask-image: linear-gradient(to right,
-        transparent 0, black 16px,
-        black calc(100% - 16px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 16px), transparent 100%);
     }
     .card-lg{
     position: relative;
@@ -193,11 +187,7 @@
     content:"";
     position:absolute;
     inset: 0;
-    background: linear-gradient(
-        188deg,
-        rgba(0,0,0,0) 24.51%,
-        rgba(0,0,0,0.80) 88.46%
-    );
+    background: linear-gradient(188deg, rgba(0,0,0,0) 24.51%, rgba(0,0,0,0.80) 88.46%);
     pointer-events: none;
     }
     .card-lg .overlay{
@@ -217,14 +207,12 @@
     .carousel-dots{
     width: 62px;
     height: 8px;
-    margin: 10px auto 18.44px;  
+    margin: 10px auto 18.44px;
     display: flex;
     align-items: center;
     justify-content: center;
     }
     .carousel-dots svg{ display:block; }
-    .carousel-dots #dotLeft,
-    .carousel-dots #dotRight{ cursor:pointer; }
     .benefits {
     list-style: none;
     margin-top: 30px;
@@ -233,28 +221,20 @@
     gap: 21px;
     }
     .benefit {
-    display: flex;               
+    display: flex;
     gap: 12px;
-    background: none;
-    border-radius: 0;
-    padding: 0;
     }
     .benefit img {
     width: 116px;
     height: 156px;
     object-fit: cover;
     border-radius: 14px;
-    background: linear-gradient(
-        188deg,
-        rgba(0, 0, 0, 0.00) 24.51%,
-        rgba(0, 0, 0, 0.80) 88.46%
-    ) lightgray 50% / cover no-repeat;
+    background: linear-gradient(188deg, rgba(0, 0, 0, 0.00) 24.51%, rgba(0, 0, 0, 0.80) 88.46%) lightgray 50% / cover no-repeat;
     }
     .b-text strong {
     color: #DEDDE0;
     font-family: Pretendard;
     font-size: 17px;
-    font-style: normal;
     font-weight: 700;
     line-height: normal;
     }
@@ -262,7 +242,6 @@
     color: #DEDDE0;
     font-family: Pretendard;
     font-size: 14px;
-    font-style: normal;
     font-weight: 500;
     line-height: normal;
     }
@@ -270,7 +249,6 @@
     color: #E9A6A6;
     font-family: Pretendard;
     font-size: 15px;
-    font-style: normal;
     font-weight: 500;
     line-height: normal;
     }
@@ -278,33 +256,34 @@
     color: #7B7B7B;
     font-family: Pretendard;
     font-size: 12px;
-    font-style: normal;
     font-weight: 400;
     line-height: 20px;
     }
     .bottom-bar {
-    position: absolute;
+    position: absolute;        
     left: 50%;
     transform: translateX(-50%);
     bottom: 0;
     width: 458px;
+    max-width: 100%;
     height: 94px;
-    border-radius: 47px;
+    border-radius: 0;
     border: 1px solid;
     border-image: linear-gradient(90deg, rgba(166,166,166,0.5), #404040) 1;
     background: linear-gradient(90deg, rgba(47,47,47,0.95) 0%, rgba(67,67,67,0.95) 100%);
     display: flex;
     justify-content: center;
-    align-items: flex-start; 
-    padding-top: 10px;     
+    align-items: flex-start;
+    padding-top: 10px;
     overflow: visible;
+    z-index: 10;
     }
     .bottom-bar::before {
     content: "";
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: -37px; 
+    top: -37px;
     width: 92px;
     height: 92px;
     border-radius: 50%;
@@ -327,7 +306,6 @@
     transform: translateY(-38px);
     background-clip: padding-box;
     }
-
     .mic-icon {
     width: 46px;
     height: 46px;

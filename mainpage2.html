@@ -1,105 +1,98 @@
-<!DOCTYPE html>
-<html lang="ko">
-
-<head>
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>시장통 메인</title>
     <link rel="stylesheet" href="mainpagereset.css" />
     <link rel="stylesheet" href="mainpage2.css" />
-</head>
-
-<body>
+    </head>
+    <body>
     <main class="stage">
         <section class="screen">
+        <div class="scroll-area">
             <header class="hero">
-                <h1 class="app-title">시장통!</h1>
-                <p class="app-sub">성남시전통시장</p>
-                <button class="ask" type="button">
-                    <img src="../img/Group9.svg" alt="" class="ask-icon" />
-                    <span>무엇을 물어볼까요?</span>
-                </button>
+            <h1 class="app-title">시장통!</h1>
+            <p class="app-sub">성남시전통시장</p>
+            <button class="ask" type="button">
+                <img src="../img/Group9.svg" alt="" class="ask-icon" />
+                <span>무엇을 물어볼까요?</span>
+            </button>
             </header>
             <section class="section">
-                <div class="section-head">
-                    <h2>성남시 시장통 구경 GO!</h2>
-                    <nav class="tabs">
-                        <button class="tab" type="button" onclick="location.href='../#'">
-                            전통시장
-                            <img src="../img/Group4(1).svg" alt="" class="tab-underline">
-                        </button>
-                        <button class="tab active" type="button" onclick="location.href='mainpage2.html'">
-                            재래시장
-                            <img src="../img/Group4.svg" alt="" class="tab-underline">
-                        </button>
-                    </nav>
+            <div class="section-head">
+                <h2>성남시 시장통 구경 GO!</h2>
+                <nav class="tabs">
+                <button class="tab" type="button" onclick="location.href='../#'">
+                    전통시장
+                    <img src="../img/Group4(1).svg" alt="" class="tab-underline">
+                </button>
+                <button class="tab active" type="button" onclick="location.href='mainpage2.html'">
+                    재래시장
+                    <img src="../img/Group4.svg" alt="" class="tab-underline">
+                </button>
+                </nav>
+            </div>
+            <div class="carousel">
+                <div class="track">
+                <article class="card-lg" data-link="../chatpage/chatpage.html">
+                    <img src="Rectangle1.png" alt="" />
+                    <div class="overlay">전국에서 가장 큰 규모의 민속 5일장<br />모란민속5일장</div>
+                </article>
+                <article class="card-lg" data-link="../chatpage/chatpage.html">
+                    <img src="Rectangle2.png" alt="" />
+                    <div class="overlay">중앙시장<br />성남중앙지하상가</div>
+                </article>
+                <article class="card-lg" data-link="../chatpage/chatpage.html">
+                    <img src="Rectangle7.png" alt="" />
+                    <div class="overlay">모란꽃시장<br />주말장터</div>
+                </article>
                 </div>
-                <div class="carousel">
-                    <div class="track">
-                        <article class="card-lg" data-link="../chatpage/chatpage.html">
-                            <img src="Rectangle1.png" alt="" />
-                            <div class="overlay">전국에서 가장 큰 규모의 민속 5일장<br />모란민속5일장</div>
-                        </article>
-                        <article class="card-lg" data-link="../chatpage/chatpage.html">
-                            <img src="Rectangle2.png" alt="" />
-                            <div class="overlay">중앙시장<br />성남중앙지하상가</div>
-                        </article>
-                        <article class="card-lg" data-link="../chatpage/chatpage.html">
-                            <img src="Rectangle7.png" alt="" />
-                            <div class="overlay">모란꽃시장<br />주말장터</div>
-                        </article>
-                    </div>
-                    <div class="carousel-dots" aria-hidden="true">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="52" height="8" viewBox="0 0 52 8" fill="none">
-                            <circle cx="14.5605" cy="4" r="3" fill="#716F79" />
-                            <circle cx="25.5605" cy="4" r="3" fill="#716F79" />
-                            <circle cx="36.5605" cy="4" r="3" fill="#E8E4EB" />
-                            <path
-                                d="M51.1211 3.85352L47.2676 7.70703L46.5605 7L49.707 3.85352L46.5605 0.707031L47.2676 0L51.1211 3.85352Z"
-                                fill="#7B7B7B" />
-                            <path
-                                d="M0 3.85352L3.85352 7.70703L4.56055 7L1.41406 3.85352L4.56055 0.707031L3.85352 0L0 3.85352Z"
-                                fill="#7B7B7B" />
-                        </svg>
-                    </div>
+                <div class="carousel-dots" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="52" height="8" viewBox="0 0 52 8" fill="none">
+                    <circle cx="14.5605" cy="4" r="3" fill="#716F79" />
+                    <circle cx="25.5605" cy="4" r="3" fill="#716F79" />
+                    <circle cx="36.5605" cy="4" r="3" fill="#E8E4EB" />
+                    <path d="M51.1211 3.85352L47.2676 7.70703L46.5605 7L49.707 3.85352L46.5605 0.707031L47.2676 0L51.1211 3.85352Z" fill="#7B7B7B" />
+                    <path d="M0 3.85352L3.85352 7.70703L4.56055 7L1.41406 3.85352L4.56055 0.707031L3.85352 0L0 3.85352Z" fill="#7B7B7B" />
+                </svg>
                 </div>
+            </div>
             </section>
             <section class="section">
-                <div class="section-head2">
-                    <div class="title-row">
-                        <h2>이번 달 시장 소식</h2>
-                        <a class="more" href="../NewIssue/newIssue.html">더보기 ›</a>
-                    </div>
+            <div class="section-head2">
+                <div class="title-row">
+                <h2>이번 달 시장 소식</h2>
+                <a class="more" href="../NewIssue/newIssue.html">더보기 ›</a>
                 </div>
-                <ul class="benefits" data-link="../chatpage/chatpage.html">
-                    <li class="benefit">
-                        <img src="Rectangle7.png" alt="" />
-                        <div class="b-text">
-                            <strong>온누리상품권 추가 할인</strong> <br />
-                            <span class="sub">온누리상품권 사용시 <b>15%</b> 할인</span>
-                            <p>온누리 상품권은 구매 시 할인 혜택을 받을 수 있습니다. 지류 상품권은 5% 할인된 금액으로 구매 가능하며, 디지털 상품권은 10% 할인된 금액으로 구매할 수
-                                있습니다.</p>
-                        </div>
-                    </li>
-                    <li class="benefit">
-                        <img src="Rectangle8.png" alt="" />
-                        <div class="b-text">
-                            <strong>성남사랑상품권 페이백</strong> <br />
-                            <span class="sub">일정 금액 이상 사용 시 <b>캐시백</b> 제공</span>
-                            <p>온누리 상품권은 구매 시 할인 혜택을 받을 수 있습니다. 지류 상품권은 5% 할인된 금액으로 구매 가능하며, 디지털 상품권은 10% 할인된 금액으로 구매할 수
-                                있습니다.</p>
-                        </div>
-                    </li>
-                </ul>
-            </section>
-            <div class="bottom-bar">
-                <button class="speech-bubble" type="button">
-                    <img src="../img/Group9.svg" alt="음성" class="mic-icon" />
-                </button>
             </div>
+            <ul class="benefits" data-link="../chatpage/chatpage.html">
+                <li class="benefit">
+                <img src="Rectangle7.png" alt="" />
+                <div class="b-text">
+                    <strong>온누리상품권 추가 할인</strong> <br />
+                    <span class="sub">온누리상품권 사용시 <b>15%</b> 할인</span>
+                    <p>온누리 상품권은 구매 시 할인 혜택을 받을 수 있습니다. 지류 상품권은 5% 할인된 금액으로 구매 가능하며, 디지털 상품권은 10% 할인된 금액으로 구매할 수 있습니다.</p>
+                </div>
+                </li>
+                <li class="benefit">
+                <img src="Rectangle8.png" alt="" />
+                <div class="b-text">
+                    <strong>성남사랑상품권 페이백</strong> <br />
+                    <span class="sub">일정 금액 이상 사용 시 <b>캐시백</b> 제공</span>
+                    <p>온누리 상품권은 구매 시 할인 혜택을 받을 수 있습니다. 지류 상품권은 5% 할인된 금액으로 구매 가능하며, 디지털 상품권은 10% 할인된 금액으로 구매할 수 있습니다.</p>
+                </div>
+                </li>
+            </ul>
+            </section>
+        </div>
+        <div class="bottom-bar">
+            <button class="speech-bubble" type="button">
+            <img src="../img/Group9.svg" alt="음성" class="mic-icon" />
+            </button>
+        </div>
         </section>
     </main>
     <script src="mainpage2.js"></script>
-</body>
-
-</html>
+    </body>
+    </html>
