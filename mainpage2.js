@@ -1,4 +1,4 @@
-document.querySelectorAll('[data-link="../chatpage/#"]').forEach((card, idx) => {
+document.querySelectorAll('[data-link="../chatpage/chatpage.html"]').forEach((card, idx) => {
     card.addEventListener('click', () => {
         const goto = card.dataset.link || '#';
         if (idx === 0) {
