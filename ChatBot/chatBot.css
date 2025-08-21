@@ -92,6 +92,7 @@ body {
 
 #bestQ {
     margin: 0 25px 0 35px;
+    height: 374px;
 }
 
 #bestQ>p {
@@ -165,7 +166,6 @@ section {
 
 footer {
     position: fixed;
-    top: 793px;
     width: 402px;
     height: 81px;
     display: flex;
