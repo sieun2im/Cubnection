@@ -144,13 +144,13 @@ body {
 
 
 header {
+    padding: 0 45.2px 0 20px;
     color: #DEDDE0;
     font-family: 'Pretendard-Regular';
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
     line-height: 74px;
-    text-align: center;
     width: 402px;
     height: 74px;
     flex-shrink: 0;
@@ -158,6 +158,23 @@ header {
     border-bottom: 1px solid #404040;
     background: linear-gradient(90deg, rgba(135, 127, 127, 0.31) -30.68%, rgba(47, 47, 47, 0.90) 13.3%, rgba(135, 127, 127, 0.59) 100%);
     position: fixed;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+
+}
+
+header>button {
+    background-color: transparent;
+    border: 0;
+    width: 10px;
+    height: 17px;
+    flex-shrink: 0;
+    margin-top: 30px;
+}
+
+header>p {
+    margin: auto;
 }
 
 section {
