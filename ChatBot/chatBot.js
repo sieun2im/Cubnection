@@ -9,6 +9,7 @@ const q3Btn = document.querySelector('#q3');
 
 
 
+let answer;
 
 //봇 채팅
 const createBC = () => {
@@ -63,7 +64,7 @@ const createC = () => {
     input.value = "";
 }
 
-const enterP = (e) => {
+async function enterP(e) {
     if (e.key === 'Enter' && input.value.trim()) {
         if (chatP.className === 'none') {
             helloP.classList = 'none';
@@ -71,7 +72,21 @@ const enterP = (e) => {
             chatP.classList.remove('none');
         }
 
-        createC()
+        try {
+            const res = await fetch(`/api/chatbot?q=${input.value.trim()}`);
+
+            if (res.ok) {
+                answer = await res.text();
+                console.log(answer)
+            } else {
+                console.log(res.status);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        createC();
     }
 }
 
@@ -88,6 +103,8 @@ q1Btn.addEventListener('click', clickQBtn);
 q2Btn.addEventListener('click', clickQBtn);
 q3Btn.addEventListener('click', clickQBtn);
 input.addEventListener('keypress', enterP);
+
+
 
 
 // const textarea = document.querySelector('textarea');
