@@ -105,7 +105,7 @@ async function enterP(e) {
             console.log(error);
         }
 
-        createBC();
+
 
 
 
