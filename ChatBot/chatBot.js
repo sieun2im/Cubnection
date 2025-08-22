@@ -20,7 +20,7 @@ const createBC = () => {
     const botMDiv = document.createElement('div');
     const textB = document.createElement('div');
     textB.classList = 'textB';
-    textB.textContent = "통신으로 받아온 값";
+    textB.textContent = answer;
     const dateP = document.createElement('p');
     dateP.classList = 'date';
     dateP.textContent = new Date().toLocaleTimeString('en-US', {
