@@ -12,7 +12,7 @@ const q3Btn = document.querySelector('#q3');
 
 
 //봇 채팅
-const createBC = (answer) => {
+function createBC(answer) {
     const botM = document.createElement('div');
     botM.classList = 'botM';
     const img = document.createElement('img');
@@ -97,13 +97,15 @@ async function enterP(e) {
             if (res.ok) {
                 const answer = await res.text();
                 console.log(answer)
-                createBC(answer)
+                createBC(answer);
             } else {
                 console.log(res.status)
             }
         } catch (error) {
             console.log(error);
         }
+
+        createBC();
 
 
 
