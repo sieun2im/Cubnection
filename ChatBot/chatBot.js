@@ -9,10 +9,10 @@ const q3Btn = document.querySelector('#q3');
 
 
 
-let answer;
+
 
 //봇 채팅
-const createBC = () => {
+const createBC = (answer) => {
     const botM = document.createElement('div');
     botM.classList = 'botM';
     const img = document.createElement('img');
@@ -85,7 +85,7 @@ async function enterP(e) {
         // } catch (error) {
         //     console.log(error);
         // }
-
+        createC();
 
         try {
             const res = await fetch("/api/chatbot/ask-lc4j", {
@@ -95,8 +95,9 @@ async function enterP(e) {
             });
 
             if (res.ok) {
-                answer = await res.text();
+                const answer = await res.text();
                 console.log(answer)
+                createBC(answer)
             } else {
                 console.log(res.status)
             }
@@ -104,7 +105,8 @@ async function enterP(e) {
             console.log(error);
         }
 
-        createC();
+
+
     }
 }
 
