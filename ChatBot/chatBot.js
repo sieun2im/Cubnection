@@ -74,11 +74,12 @@ async function enterP(e) {
         createC();
 
         try {
-            const res = await fetch(`/api/chatbot?q=${input.value.trim()}`);
+            const res = await fetch(`/api/chatbot?q= ${input.value.trim()}`);
 
             if (res.ok) {
                 answer = await res.text();
                 console.log(answer)
+                createBC(answer);
             } else {
                 console.log(res.status);
             }
