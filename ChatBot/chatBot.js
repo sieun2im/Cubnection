@@ -8,8 +8,32 @@ const q2Btn = document.querySelector('#q2');
 const q3Btn = document.querySelector('#q3');
 
 
+async function recomendQ() {
+    try {
+        const res = await fetch('/api/chatbot/suggestions', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
 
+        if (!res.ok) {
+            console.log(res.status)
+        }
+        const data = await response.json();
+        console.log('추천 질문 목록:', data);
+        return data;
 
+    } catch (error) {
+
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const data = recomendQ();
+
+})
 
 //봇 채팅
 const createBC = (answer) => {
