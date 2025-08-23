@@ -71,39 +71,40 @@ async function enterP(e) {
             bestQ.classList = 'none';
             chatP.classList.remove('none');
         }
-
-        // try {
-        //     const res = await fetch(`/api/chatbot?q=${input.value.trim()}`);
-
-        //     if (res.ok) {
-        //         answer = await res.text();
-        //         console.log(answer)
-        //     } else {
-        //         console.log(res.status);
-        //     }
-
-        // } catch (error) {
-        //     console.log(error);
-        // }
         createC();
 
         try {
-            const res = await fetch("/api/chatbot/ask-lc4j", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question: input.value.trim() })
-            });
+            const res = await fetch(`/api/chatbot?q=${input.value.trim()}`);
 
             if (res.ok) {
-                const answer = await res.text();
+                answer = await res.text();
                 console.log(answer)
-                createBC(answer);
             } else {
-                console.log(res.status)
+                console.log(res.status);
             }
+
         } catch (error) {
             console.log(error);
         }
+
+
+        // try {
+        //     const res = await fetch("/api/chatbot/ask-lc4j", {
+        //         method: "POST",
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify({ question: input.value.trim() })
+        //     });
+
+        //     if (res.ok) {
+        //         const answer = await res.text();
+        //         console.log(answer)
+        //         createBC(answer);
+        //     } else {
+        //         console.log(res.status)
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        // }
 
 
 
