@@ -152,18 +152,39 @@ async function enterP(e) {
 }
 
 //화면전환
-const clickQBtn = (e) => {
+async function clickQBtn(e) {
     helloP.classList = 'none';
     bestQ.classList = 'none';
     chatP.classList.remove('none');
     input.value = e.target.textContent;
     createC();
+
+    try {
+        const res = await fetch(`/api/chatbot/ask-suggestion/${e.target.id.slice(1)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!res.ok) {
+            console.log(res.status)
+        }
+        const recomendA = await res.json();
+        console.log(recomendA);
+    } catch (error) {
+        console.log(error)
+    }
+
+
+
+    input.value = "";
 }
 
-q1Btn.addEventListener('click', clickQBtn);
-q2Btn.addEventListener('click', clickQBtn);
-q3Btn.addEventListener('click', clickQBtn);
+qBtn[0].addEventListener('click', clickQBtn);
+qBtn[1].addEventListener('click', clickQBtn);
+qBtn[2].addEventListener('click', clickQBtn);
+qBtn[3].addEventListener('click', clickQBtn);
 qBtn[4].addEventListener('click', clickQBtn);
-qBtn[5].addEventListener('click', clickQBtn);
 input.addEventListener('keypress', enterP);
 
