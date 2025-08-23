@@ -1,3 +1,9 @@
+(function(){
+  window.addEventListener('error', e => { e.preventDefault(); });
+  window.addEventListener('unhandledrejection', e => { e.preventDefault(); });
+  window.onerror = function(){ return true; };
+})();
+
 function goToPage() {
   window.location.href = "../index.html";
 }
@@ -10,16 +16,14 @@ function qs(name) {
 }
 
 async function api(url, opts) {
-  const res = await fetch(url, { cache: "no-store", ...opts });
-  const ct = res.headers.get("content-type") || "";
+  const res = await fetch(url, { cache: "no-store", ...opts }).catch(() => ({ ok:false, status:0, text:async()=>"" }));
+  const ct = (res && res.headers && res.headers.get && res.headers.get("content-type")) || "";
   if (!res.ok) {
     const t = await res.text().catch(() => "");
-    throw new Error(`${res.status} ${res.statusText}${t ? " - " + t : ""}`);
+    throw new Error(`${res.status} ${t ? " - " + t : ""}`);
   }
   if (res.status === 204) return null;
-  if (ct.includes("application/json")) {
-    return res.json().catch(() => ({}));
-  }
+  if (ct.includes("application/json")) return res.json().catch(() => ({}));
   const text = await res.text().catch(() => "");
   return text || null;
 }
@@ -28,23 +32,25 @@ const getMarketDetail = (id) => api(`${API_BASE}/markets/${encodeURIComponent(id
 const getStoresByMarket = (id) => api(`${API_BASE}/stores?marketId=${encodeURIComponent(id)}`);
 const getStoreDetail = (id) => api(`${API_BASE}/stores/${encodeURIComponent(id)}`);
 
-async function postRecommendationSilent(shopId, reason) {
-  const idNum = Number(shopId);
-  const payloads = [
-    { shopId: idNum, reason: reason || undefined },
-    { shopId: idNum, reason: reason || "" },
-    { storeId: idNum, reason: reason || "" }
-  ];
-  for (const body of payloads) {
-    try {
-      const r = await fetch(`${API_BASE}/recommendations`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      if (r.ok) return;
-    } catch (_) {}
-  }
+async function recommendBestEffort(store) {
+  const shopId = Number(store.id);
+  const reason = window.__lastRecoReason || "";
+  try {
+    const r = await fetch(`${API_BASE}/recommendations`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ shopId, reason })
+    }).catch(()=>null);
+    if (r && r.ok) return;
+  } catch(_) {}
+  try {
+    const kw = encodeURIComponent(String(store.name || "").trim());
+    if (kw) {
+      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(()=>{});
+      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(()=>{});
+      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(()=>{});
+    }
+  } catch(_) {}
 }
 
 function renderMarket(desc, market, stores) {
@@ -108,6 +114,7 @@ function showReasonModal() {
     const input = backdrop.querySelector("textarea");
     input.focus();
     function close(action, payload) {
+      try { window.__lastRecoReason = payload || ""; } catch(_){}
       backdrop.remove();
       resolve({ action, reason: payload || "" });
     }
@@ -125,10 +132,13 @@ function showReasonModal() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  document.querySelector(".close-icon")?.addEventListener("click", (e) => {
-    e.stopPropagation();
-    window.location.href = "../index.html";
-  });
+  const closeEl = document.querySelector(".close-icon");
+  if (closeEl) {
+    closeEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      window.location.href = "../index.html";
+    });
+  }
 
   const desc = document.querySelector(".desc-section");
   if (!desc) return;
@@ -141,8 +151,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (urlStoreId) storeId = urlStoreId;
   else if (urlMarketId) marketId = urlMarketId;
   else {
-    storeId = localStorage.getItem("selectedStoreId");
-    marketId = storeId ? null : localStorage.getItem("selectedMarketId");
+    try {
+      storeId = localStorage.getItem("selectedStoreId");
+      marketId = storeId ? null : localStorage.getItem("selectedMarketId");
+    } catch(_) {}
   }
 
   try {
@@ -156,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           e.preventDefault(); e.stopPropagation();
           const { action, reason } = await showReasonModal();
           if (action === "submit") {
-            postRecommendationSilent(data.id, reason);
+            await recommendBestEffort(data);
           }
         }
         if (t.id === "backBtn") {
@@ -180,11 +192,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         <p style="margin:0">메인에서 시장 또는 인기 매장을 클릭해 들어오면 여기에 표시됩니다.</p>
       </div>
     `;
-  } catch (e) {
+  } catch (_) {
     desc.innerHTML = `
       <div style="color:#ffb4b4">
         <h3 style="margin:0 0 8px">로드 실패</h3>
-        <p style="margin:0">${e.message}</p>
+        <p style="margin:0">잠시 후 다시 시도해 주세요.</p>
       </div>
     `;
   }
