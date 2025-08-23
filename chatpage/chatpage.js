@@ -41,13 +41,12 @@ function renderMarket(desc, market, stores) {
           ? `<div>등록된 가게가 없습니다.</div>`
           : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
               ${list.map(s => `
-                <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
+                <li data-store-id="${s.id}" style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
                   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
                     <div>
                       <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
                       <div style="margin-top:4px">${s.description || ""}</div>
                     </div>
-                    <button type="button" data-store-id="${s.id}">상세</button>
                   </div>
                 </li>`).join("")}
             </ul>`
@@ -72,28 +71,7 @@ function renderStore(desc, data) {
   `;
 }
 
-function ensureReasonModalStyle() {
-  if (document.getElementById('reco-modal-style')) return;
-  const css = `
-  .reco-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:9999}
-  .reco-modal{position:relative;width:min(92vw,420px);background:#1f1f1f;color:#dedde0;border:1px solid #2f2f2f;border-radius:16px;padding:18px 16px 14px;box-shadow:0 12px 32px rgba(0,0,0,.35)}
-  .reco-modal h3{margin:0 0 10px;font-size:16px;font-weight:700}
-  .reco-modal textarea{width:100%;height:110px;background:#0f0f0f;border:1px solid #333;color:#fff;border-radius:12px;padding:12px;resize:none;outline:none}
-  .reco-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
-  .reco-actions button{border:0;border-radius:999px;padding:10px 14px;cursor:pointer;font-family:inherit}
-  .reco-actions [data-skip]{background:#2c2c2c;color:#ddd}
-  .reco-actions [data-submit]{background:linear-gradient(135deg,#9b7bff 0%, #7c5cff 100%);color:#fff;box-shadow:0 6px 14px rgba(124,92,255,.35)}
-  .reco-close{position:absolute;top:8px;right:10px;background:transparent;border:0;color:#aaa;font-size:20px;line-height:1;cursor:pointer}
-  .reco-close:hover{color:#fff}
-  `;
-  const style = document.createElement('style');
-  style.id = 'reco-modal-style';
-  style.textContent = css;
-  document.head.appendChild(style);
-}
-
 function showReasonModal() {
-  ensureReasonModalStyle();
   return new Promise((resolve) => {
     const backdrop = document.createElement('div');
     backdrop.className = 'reco-backdrop';
@@ -155,6 +133,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const t = e.target;
         if (!(t instanceof HTMLElement)) return;
         if (t.id === "recoBtn") {
+          e.preventDefault();
+          e.stopPropagation();
           try {
             const reason = (await showReasonModal()) ?? "";
             await postRecommendation(Number(data.id), reason);
@@ -164,6 +144,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         }
         if (t.id === "backBtn") {
+          e.preventDefault();
+          e.stopPropagation();
           history.length > 1 ? history.back() : (location.href = "../index.html");
         }
       });
@@ -175,10 +157,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const stores = await getStoresByMarket(marketId);
       renderMarket(desc, market, stores);
       desc.addEventListener("click", (e) => {
-        const t = e.target;
-        if (!(t instanceof HTMLElement)) return;
-        const sid = t.getAttribute('data-store-id');
-        if (sid) location.href = `./chatpage.html?storeId=${encodeURIComponent(sid)}`;
+        const el = (e.target instanceof HTMLElement) ? e.target.closest('[data-store-id]') : null;
+        if (!el) return;
+        const sid = el.getAttribute('data-store-id');
+        if (sid) {
+          e.preventDefault();
+          e.stopPropagation();
+          location.href = `./chatpage.html?storeId=${encodeURIComponent(sid)}`;
+        }
       });
       return;
     }
