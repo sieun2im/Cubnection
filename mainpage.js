@@ -9,7 +9,7 @@ document.querySelectorAll('[data-link="../chatpage/chatpage.html"]').forEach((ca
         } else {
             window.location.href = goto;
         }
-    }); 
+    });
 });
 const track = document.querySelector('.track');
 const cards = Array.from(document.querySelectorAll('.card-lg'));
@@ -92,8 +92,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.log(error);
     }
 });
+
 (() => {
     const API_BASE = '/api';
+
     async function api(url, opts) {
         const res = await fetch(url, opts);
         if (!res.ok) {
@@ -102,20 +104,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         return res.json();
     }
+
     const fetchMarkets = () => api(`${API_BASE}/markets`);
     const fetchPopular = () => api(`${API_BASE}/stores/popular`);
     const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
+
     function hydrateMarketsIntoCarousel(markets) {
         const track = document.querySelector('.track');
         if (!track) return;
+
         const cards = Array.from(track.querySelectorAll('.card-lg'));
         const list = Array.isArray(markets) ? markets.slice(0, 3) : [];
-        const attachCardClick = (card) => {
-            card.addEventListener('click', () => {
-                const goto = card.dataset.link || '#';
-                window.location.href = goto;
-            });
-        };
+
         let i = 0;
         for (; i < cards.length && i < list.length; i++) {
             const m = list[i];
@@ -123,9 +123,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             card.dataset.type = 'market';
             card.dataset.id = String(m.id);
             card.dataset.link = `../chatpage/chatpage.html?marketId=${encodeURIComponent(m.id)}`;
+
             const img = card.querySelector('img') || document.createElement('img');
             if (!img.parentNode) card.prepend(img);
             if (!img.getAttribute('src')) img.setAttribute('src', 'Rectangle1.png');
+
             let overlay = card.querySelector('.overlay');
             if (!overlay) {
                 overlay = document.createElement('div');
@@ -133,11 +135,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 card.appendChild(overlay);
             }
             overlay.innerHTML = `${m.name}${m.location ? `<br/><span style="font-size:12px;opacity:.9">${m.location}</span>` : ''}`;
-            if (!card.dataset.addonBound) {
-                attachCardClick(card);
-                card.dataset.addonBound = '1';
-            }
         }
+
         for (; i < list.length; i++) {
             const m = list[i];
             const card = document.createElement('article');
@@ -149,16 +148,22 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <img src="Rectangle1.png" alt="" />
                 <div class="overlay">${m.name}${m.location ? `<br/><span style="font-size:12px;opacity:.9">${m.location}</span>` : ''}</div>
             `;
-            attachCardClick(card);
+            card.addEventListener('click', () => {
+                const goto = card.dataset.link || '#';
+                window.location.href = goto;
+            });
             track.appendChild(card);
         }
     }
+
     function renderPopularIntoBenefits(popular) {
         const ul = document.querySelector('.benefits');
         if (!ul) return;
+
         ul.removeAttribute('data-link');
         ul.innerHTML = '';
-        const list = Array.isArray(popular) ? popular.slice(0, 10) : [];
+
+        const list = Array.isArray(popular) ? popular.slice(0, 2) : [];
         if (list.length === 0) {
             ul.innerHTML = `
                 <li class="benefit">
@@ -169,6 +174,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 </li>`;
             return;
         }
+
         list.forEach((p, idx) => {
             const li = document.createElement('li');
             li.className = 'benefit';
@@ -188,6 +194,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             ul.appendChild(li);
         });
     }
+
     document.addEventListener('DOMContentLoaded', async () => {
         try {
             const [markets, popular] = await Promise.all([
@@ -200,4 +207,21 @@ document.addEventListener("DOMContentLoaded", async function () {
             console.error('[ADD-ON init error]', e);
         }
     });
+})();
+
+(() => {
+    function trimPopularToTwo() {
+        const ul = document.querySelector('.benefits');
+        if (!ul) return;
+        const items = Array.from(ul.children).filter(el => el.classList && el.classList.contains('benefit'));
+        for (let i = 2; i < items.length; i++) items[i].remove();
+    }
+    window.addEventListener('load', () => {
+        requestAnimationFrame(trimPopularToTwo);
+        setTimeout(trimPopularToTwo, 0);
+    });
+    const ul = document.querySelector('.benefits');
+    if (ul) {
+        new MutationObserver(trimPopularToTwo).observe(ul, { childList: true });
+    }
 })();
