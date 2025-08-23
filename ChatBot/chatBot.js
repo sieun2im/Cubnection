@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async function recomendQ() {
         console.log('추천 질문 목록:', data);
         console.log(data[1].text)
 
-        for (let i of qBtn) {
+        for (let i in qBtn) {
             console.log(i)
             q1Btn[i].textContent = data[i].text;
 
