@@ -6,6 +6,7 @@ const bestQ = document.querySelector('#bestQ');
 const q1Btn = document.querySelector('#q1');
 const q2Btn = document.querySelector('#q2');
 const q3Btn = document.querySelector('#q3');
+const qBtn = document.querySelectorAll('#bestQ>button')
 
 
 
@@ -24,7 +25,13 @@ document.addEventListener("DOMContentLoaded", async function recomendQ() {
         }
         const data = await res.json();
         console.log('추천 질문 목록:', data);
-        return data;
+
+
+        for (let i of qBtn) {
+            q1Btn[i].textContent = data[i].text;
+            console.log(data[i])
+        }
+
 
     } catch (error) {
         console.log(error);
