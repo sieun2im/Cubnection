@@ -9,7 +9,7 @@ document.querySelectorAll('[data-link="../chatpage/chatpage.html"]').forEach((ca
         } else {
             window.location.href = goto;
         }
-    });
+    }); 
 });
 const track = document.querySelector('.track');
 const cards = Array.from(document.querySelectorAll('.card-lg'));
@@ -79,9 +79,21 @@ function switchTab(btn, type) {
     }
 }
 
+document.addEventListener("DOMContentLoaded", async function () {
+    try {
+        const res = await fetch('/api/markets');
+        if (res.ok) {
+            const markets = await res.json();
+            console.log(markets);
+        } else {
+            console.log(res.status);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
 (() => {
     const API_BASE = '/api';
-
     async function api(url, opts) {
         const res = await fetch(url, opts);
         if (!res.ok) {
@@ -90,21 +102,14 @@ function switchTab(btn, type) {
         }
         return res.json();
     }
-
-    const MARKET_START = 3;
-    const MARKET_LIMIT = 3;
-    const POPULAR_START = 0;
-    const POPULAR_LIMIT = 2;
-
     const fetchMarkets = () => api(`${API_BASE}/markets`);
     const fetchPopular = () => api(`${API_BASE}/stores/popular`);
     const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
-
     function hydrateMarketsIntoCarousel(markets) {
         const track = document.querySelector('.track');
         if (!track) return;
         const cards = Array.from(track.querySelectorAll('.card-lg'));
-        const list = Array.isArray(markets) ? markets.slice(MARKET_START, MARKET_START + MARKET_LIMIT) : [];
+        const list = Array.isArray(markets) ? markets.slice(0, 3) : [];
         const attachCardClick = (card) => {
             card.addEventListener('click', () => {
                 const goto = card.dataset.link || '#';
@@ -148,13 +153,12 @@ function switchTab(btn, type) {
             track.appendChild(card);
         }
     }
-
     function renderPopularIntoBenefits(popular) {
         const ul = document.querySelector('.benefits');
         if (!ul) return;
         ul.removeAttribute('data-link');
         ul.innerHTML = '';
-        const list = Array.isArray(popular) ? popular.slice(POPULAR_START, POPULAR_START + POPULAR_LIMIT) : [];
+        const list = Array.isArray(popular) ? popular.slice(0, 10) : [];
         if (list.length === 0) {
             ul.innerHTML = `
                 <li class="benefit">
@@ -184,7 +188,6 @@ function switchTab(btn, type) {
             ul.appendChild(li);
         });
     }
-
     document.addEventListener('DOMContentLoaded', async () => {
         try {
             const [markets, popular] = await Promise.all([
