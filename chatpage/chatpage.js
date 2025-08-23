@@ -19,6 +19,7 @@ async function api(url, opts) {
 }
 
 const getMarketDetail = (id) => api(`${API_BASE}/markets/${id}`);
+const getStoresByMarket = (id) => api(`${API_BASE}/stores?marketId=${id}`);
 const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
 const postRecommendation = (shopId, reason) =>
   api(`${API_BASE}/recommendations`, {
@@ -27,8 +28,10 @@ const postRecommendation = (shopId, reason) =>
     body: JSON.stringify({ shopId, reason: reason || undefined }),
   });
 
-function renderMarket(desc, data) {
-  const stores = Array.isArray(data.stores) ? data.stores : [];
+function renderMarket(desc, data, storesOverride) {
+  const stores = Array.isArray(storesOverride) ? storesOverride
+               : Array.isArray(data.stores) ? data.stores
+               : [];
   desc.innerHTML = `
     <div>
       <h2 style="margin:0 0 8px">${data.name}</h2>
@@ -39,21 +42,21 @@ function renderMarket(desc, data) {
         stores.length === 0
           ? `<div>등록된 가게가 없습니다.</div>`
           : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
-              ${stores
-                .map(
-                  (s) => `
-                <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
-                  <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
-                    <div>
-                      <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
-                      <div style="margin-top:4px">${s.description || ""}</div>
-                    </div>
-                    <button type="button" data-store-id="${s.id}" class="btn-detail">상세</button>
-                  </div>
-                </li>`
-                )
-                .join("")}
-            </ul>`
+               ${stores
+                 .map(
+                   (s) => `
+                 <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
+                   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+                     <div>
+                       <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
+                       <div style="margin-top:4px">${s.description || ""}</div>
+                     </div>
+                     <button type="button" data-store-id="${s.id}" class="btn-detail">상세</button>
+                   </div>
+                 </li>`
+                 )
+                 .join("")}
+             </ul>`
       }
     </div>
   `;
@@ -122,8 +125,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (marketId) {
-      const data = await getMarketDetail(marketId);
-      renderMarket(desc, data);
+      const m = await getMarketDetail(marketId);
+      let stores = Array.isArray(m.stores) ? m.stores : [];
+      if (stores.length === 0) {
+        try {
+          stores = await getStoresByMarket(m.id);
+        } catch (_) {}
+      }
+      renderMarket(desc, m, stores);
       desc.addEventListener("click", (e) => {
         const t = e.target;
         if (!(t instanceof HTMLElement)) return;
