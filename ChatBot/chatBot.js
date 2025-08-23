@@ -10,7 +10,7 @@ const qBtn = document.querySelectorAll('#bestQ>button')
 
 
 
-//추천질문API
+//추천질문 API
 document.addEventListener("DOMContentLoaded", async function recomendQ() {
     try {
         const res = await fetch('/api/chatbot/suggestions', {
@@ -109,7 +109,6 @@ async function enterP(e) {
 
         //springAI
         // try {
-        //     console.log(input.value);
         //     const res = await fetch(`/api/chatbot?q= ${input.value}`);
 
         //     if (res.ok) {
@@ -151,7 +150,7 @@ async function enterP(e) {
     }
 }
 
-//화면전환
+//화면전환, 추천질문 응답 API
 async function clickQBtn(e) {
     helloP.classList = 'none';
     bestQ.classList = 'none';
@@ -171,13 +170,10 @@ async function clickQBtn(e) {
             console.log(res.status)
         }
         const recomendA = await res.json();
-        console.log(recomendA.answer);
         createBC(recomendA.answer);
     } catch (error) {
         console.log(error)
     }
-
-
 
     input.value = "";
 }
