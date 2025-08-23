@@ -6,8 +6,11 @@
     <title>시장통 메인</title>
     <link rel="stylesheet" href="mainpagereset.css" />
     <link rel="stylesheet" href="mainpage.css" />
+    <style>
+        .hydrating .deferred { display: none; }
+    </style>
     </head>
-    <body>
+    <body class="hydrating">
     <main class="stage">
         <section class="screen">
         <div class="scroll-area">
@@ -69,9 +72,11 @@
             <ul class="benefits" data-link="../chatpage/chatpage.html">
                 <li class="benefit">
                 <img src="Rectangle7.png" alt="" />
+                <div class="b-text deferred"></div>
                 </li>
                 <li class="benefit">
                 <img src="Rectangle8.png" alt="" />
+                <div class="b-text deferred"></div>
                 </li>
             </ul>
             </section>
