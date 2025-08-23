@@ -47,7 +47,6 @@ function renderMarket(desc, market, stores) {
                       <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
                       <div style="margin-top:4px">${s.description || ""}</div>
                     </div>
-                    <button type="button" data-store-id="${s.id}" class="btn-detail">상세</button>
                   </div>
                 </li>`).join("")}
             </ul>`
