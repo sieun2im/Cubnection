@@ -10,7 +10,7 @@ const qBtn = document.querySelectorAll('#bestQ>button')
 
 
 
-
+//추천질문API
 document.addEventListener("DOMContentLoaded", async function recomendQ() {
     try {
         const res = await fetch('/api/chatbot/suggestions', {
@@ -29,7 +29,9 @@ document.addEventListener("DOMContentLoaded", async function recomendQ() {
 
         let i = 0;
         qBtn.forEach(btn => {
+            console.log(btn.id);
             btn.textContent = data[i].text;
+
             i++;
         });
 
@@ -94,6 +96,7 @@ const createC = () => {
 
 }
 
+//AI API
 async function enterP(e) {
     if (e.key === 'Enter' && input.value.trim()) {
         if (chatP.className === 'none') {
@@ -148,7 +151,7 @@ async function enterP(e) {
     }
 }
 
-
+//화면전환
 const clickQBtn = (e) => {
     helloP.classList = 'none';
     bestQ.classList = 'none';
@@ -160,23 +163,7 @@ const clickQBtn = (e) => {
 q1Btn.addEventListener('click', clickQBtn);
 q2Btn.addEventListener('click', clickQBtn);
 q3Btn.addEventListener('click', clickQBtn);
+qBtn[4].addEventListener('click', clickQBtn);
+qBtn[5].addEventListener('click', clickQBtn);
 input.addEventListener('keypress', enterP);
 
-
-
-
-// const textarea = document.querySelector('textarea');
-// const textDiv = document.querySelector('.textDiv');
-
-// const textP = () => {
-//     console.log('aa')
-//     textDiv.textContent = textarea.value;
-// }
-
-// const textareaF = () => {
-//     console.log('a')
-//     textarea.focus();
-// }
-
-// textDiv.addEventListener('click', textareaF);
-// textarea.addEventListener('input', textP);
