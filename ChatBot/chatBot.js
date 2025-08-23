@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async function recomendQ() {
         if (!res.ok) {
             console.log(res.status)
         }
-        const data = await response.json();
+        const data = await res.json();
         console.log('추천 질문 목록:', data);
         return data;
 
