@@ -25,11 +25,12 @@ document.addEventListener("DOMContentLoaded", async function recomendQ() {
         }
         const data = await res.json();
         console.log('추천 질문 목록:', data);
-
+        console.log(data[1].text)
 
         for (let i of qBtn) {
-            q1Btn[i].textContent = data[i].text;
             console.log(data[i])
+            q1Btn[i].textContent = data[i].text;
+
         }
 
 
