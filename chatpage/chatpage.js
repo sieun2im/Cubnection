@@ -27,12 +27,31 @@ async function api(url, opts) {
 const getMarketDetail = (id) => api(`${API_BASE}/markets/${encodeURIComponent(id)}`);
 const getStoresByMarket = (id) => api(`${API_BASE}/stores?marketId=${encodeURIComponent(id)}`);
 const getStoreDetail = (id) => api(`${API_BASE}/stores/${encodeURIComponent(id)}`);
-const postRecommendation = (shopId, reason) =>
-  api(`${API_BASE}/recommendations`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ shopId: Number(shopId), reason: reason || undefined }),
-  });
+
+async function postRecommendationRobust(shopId, reason) {
+  const idNum = Number(shopId);
+  const tries = [
+    { shopId: idNum, reason: reason || undefined },
+    { shopId: idNum, reason: reason || "" },
+    { storeId: idNum, reason: reason || "" }
+  ];
+  let lastErr;
+  for (const body of tries) {
+    try {
+      const r = await fetch(`${API_BASE}/recommendations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if (r.ok) return true;
+      const txt = await r.text().catch(() => "");
+      lastErr = new Error(`${r.status} ${r.statusText}${txt ? " - " + txt : ""}`);
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error("추천 실패");
+}
 
 function renderMarket(desc, market, stores) {
   const list = Array.isArray(stores) ? stores : [];
@@ -46,19 +65,15 @@ function renderMarket(desc, market, stores) {
         list.length === 0
           ? `<div>등록된 가게가 없습니다.</div>`
           : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
-              ${list
-                .map(
-                  (s) => `
-                <li data-store-id="${s.id}" style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
+              ${list.map(s => `
+                <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px;cursor:default">
                   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
                     <div>
                       <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
                       <div style="margin-top:4px">${s.description || ""}</div>
                     </div>
                   </div>
-                </li>`
-                )
-                .join("")}
+                </li>`).join("")}
             </ul>`
       }
     </div>
@@ -105,22 +120,15 @@ function showReasonModal() {
       resolve({ action, reason: payload || "" });
     }
 
-    backdrop.addEventListener("click", (e) => {
-      if (e.target === backdrop) close("close");
-    });
+    backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close("close"); });
     backdrop.querySelector(".reco-close").addEventListener("click", () => close("close"));
-    backdrop.querySelector("[data-skip]").addEventListener("click", () => close("skip"));
+    backdrop.querySelector("[data-skip]").addEventListener("click", () => close("close"));
     backdrop.querySelector("[data-submit]").addEventListener("click", () => close("submit", input.value.trim()));
     input.addEventListener("keydown", (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "Enter") close("submit", input.value.trim());
       if (e.key === "Escape") close("close");
     });
-    function onEsc(e) {
-      if (e.key === "Escape") {
-        window.removeEventListener("keydown", onEsc);
-        close("close");
-      }
-    }
+    function onEsc(e){ if (e.key === "Escape") { window.removeEventListener("keydown", onEsc); close("close"); } }
     window.addEventListener("keydown", onEsc);
   });
 }
@@ -139,11 +147,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   let marketId = null;
   let storeId = null;
 
-  if (urlStoreId) {
-    storeId = urlStoreId;
-  } else if (urlMarketId) {
-    marketId = urlMarketId;
-  } else {
+  if (urlStoreId) storeId = urlStoreId;
+  else if (urlMarketId) marketId = urlMarketId;
+  else {
     storeId = localStorage.getItem("selectedStoreId");
     marketId = storeId ? null : localStorage.getItem("selectedMarketId");
   }
@@ -158,12 +164,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!(t instanceof HTMLElement)) return;
 
         if (t.id === "recoBtn") {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           try {
             const { action, reason } = await showReasonModal();
             if (action !== "submit") return;
-            await postRecommendation(data.id, reason);
+            await postRecommendationRobust(data.id, reason);
             alert("추천 완료! (인기 +3 반영)");
           } catch (err) {
             alert("추천 실패: " + err.message);
@@ -171,8 +176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         if (t.id === "backBtn") {
-          e.preventDefault();
-          e.stopPropagation();
+          e.preventDefault(); e.stopPropagation();
           history.length > 1 ? history.back() : (location.href = "../index.html");
         }
       });
@@ -183,17 +187,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const market = await getMarketDetail(marketId);
       const stores = await getStoresByMarket(marketId);
       renderMarket(desc, market, stores);
-
-      desc.addEventListener("click", (e) => {
-        const el = e.target instanceof HTMLElement ? e.target.closest("[data-store-id]") : null;
-        if (!el) return;
-        const sid = el.getAttribute("data-store-id");
-        if (sid) {
-          e.preventDefault();
-          e.stopPropagation();
-          location.href = `./chatpage.html?storeId=${encodeURIComponent(sid)}`;
-        }
-      });
       return;
     }
 
