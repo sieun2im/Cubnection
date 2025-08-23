@@ -9,7 +9,7 @@ document.querySelectorAll('[data-link="../chatpage/chatpage.html"]').forEach((ca
         } else {
             window.location.href = goto;
         }
-    }); 
+    });
 });
 const track = document.querySelector('.track');
 const cards = Array.from(document.querySelectorAll('.card-lg'));
@@ -25,7 +25,7 @@ function getStep() {
     return w + gap;
 }
 function maxIndex() {
-    return Math.max(0, cards.length - 1);
+    return Math.max(0, cards.length - 1); 
 }
 function getMaxScrollLeft() {
     if (!track) return 0;
@@ -92,6 +92,7 @@ function switchTab(btn, type) {
     const fetchMarkets = () => api(`${API_BASE}/markets`);
     const fetchPopular = () => api(`${API_BASE}/stores/popular`);
     const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
+
     function hydrateMarketsIntoCarousel(markets) {
         const track = document.querySelector('.track');
         if (!track) return;
@@ -140,12 +141,13 @@ function switchTab(btn, type) {
             track.appendChild(card);
         }
     }
+
     function renderPopularIntoBenefits(popular) {
         const ul = document.querySelector('.benefits');
         if (!ul) return;
         ul.removeAttribute('data-link');
         ul.innerHTML = '';
-        const list = Array.isArray(popular) ? popular.slice(0, 10) : [];
+        const list = Array.isArray(popular) ? popular.slice(0, 2) : [];
         if (list.length === 0) {
             ul.innerHTML = `
                 <li class="benefit">
@@ -175,6 +177,7 @@ function switchTab(btn, type) {
             ul.appendChild(li);
         });
     }
+
     document.addEventListener('DOMContentLoaded', async () => {
         try {
             const [markets, popular] = await Promise.all([
