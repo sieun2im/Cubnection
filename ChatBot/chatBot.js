@@ -8,7 +8,9 @@ const q2Btn = document.querySelector('#q2');
 const q3Btn = document.querySelector('#q3');
 
 
-async function recomendQ() {
+
+
+document.addEventListener("DOMContentLoaded", async function recomendQ() {
     try {
         const res = await fetch('/api/chatbot/suggestions', {
             method: 'GET',
@@ -25,13 +27,8 @@ async function recomendQ() {
         return data;
 
     } catch (error) {
-
+        console.log(error);
     }
-
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const data = recomendQ();
 
 })
 
