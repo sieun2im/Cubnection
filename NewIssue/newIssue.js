@@ -4,7 +4,7 @@ const issuesPage = document.querySelector('.issuesPage');
 
 
 
-async function getIssues() {
+document.addEventListener('DOMContentLoaded', async function () {
 
     try {
         const res = await fetch('/api/stores/popular', {
@@ -19,6 +19,8 @@ async function getIssues() {
         }
 
         const data = await res.json();
+
+        console.log(data)
 
         const createIssue = (issue) => {
             const issues = document.createElement('div');
@@ -58,7 +60,7 @@ async function getIssues() {
         console.log(error)
     }
 }
-
+);
 
 
 
