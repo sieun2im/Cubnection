@@ -1,10 +1,139 @@
 function goToPage() {
-  // 카드 클릭 시 이동할 페이지
-  window.location.href = "../index.html"; // 필요 없으면 함수 자체 삭제 가능
+  window.location.href = "../index.html";
 }
 
-// 닫기 버튼 클릭 시 mainpage.html로 이동
-document.querySelector(".close-icon")?.addEventListener("click", (e) => {
-e.stopPropagation(); 
-  window.location.href = "../index.html"; // 경로에 맞게 조정
+const API_BASE = "/api";
+
+function qs(name) {
+  const v = new URLSearchParams(location.search).get(name);
+  return v ?? null;
+}
+
+async function api(url, opts) {
+  const res = await fetch(url, opts);
+  if (!res.ok) {
+    const t = await res.text().catch(() => "");
+    throw new Error(`${res.status} ${res.statusText} - ${t || "요청 실패"}`);
+  }
+  return res.json();
+}
+
+const getMarketDetail = (id) => api(`${API_BASE}/markets/${id}`);
+const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
+const postRecommendation = (shopId, reason) =>
+  api(`${API_BASE}/recommendations`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ shopId, reason: reason || undefined }),
+  });
+
+function renderMarket(desc, data) {
+  const stores = Array.isArray(data.stores) ? data.stores : [];
+  desc.innerHTML = `
+    <div>
+      <h2 style="margin:0 0 8px">${data.name}</h2>
+      <div style="opacity:.8;margin-bottom:8px">${data.location || ""}</div>
+      <p style="margin:0 0 16px">${data.description || ""}</p>
+      <h3 style="margin:0 0 8px">가게 리스트</h3>
+      ${
+        stores.length === 0
+          ? `<div>등록된 가게가 없습니다.</div>`
+          : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
+               ${stores
+                 .map(
+                   (s) => `
+                 <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
+                   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+                     <div>
+                       <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
+                       <div style="margin-top:4px">${s.description || ""}</div>
+                     </div>
+                     <button type="button" data-store-id="${s.id}" class="btn-detail">상세</button>
+                   </div>
+                 </li>`
+                 )
+                 .join("")}
+             </ul>`
+      }
+    </div>
+  `;
+}
+
+function renderStore(desc, data) {
+  desc.innerHTML = `
+    <div>
+      <h2 style="margin:0 0 6px">${data.name}</h2>
+      <div style="opacity:.8;margin-bottom:8px">${data.category || "-"}</div>
+      <h3 style="margin:0 0 6px">가게 소개</h3>
+      <p style="margin:0 0 16px">${data.description || "소개가 아직 없어요."}</p>
+      <div style="display:flex;gap:8px">
+        <button id="recoBtn" type="button">⭐ 추천하기(인기 +3)</button>
+        <button id="backBtn" type="button">← 뒤로</button>
+      </div>
+      <div style="opacity:.7;margin-top:12px;font-size:12px">/api/stores/{id} 응답에는 주소/영업시간이 포함되지 않습니다.</div>
+    </div>
+  `;
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  document.querySelector(".close-icon")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    window.location.href = "../index.html";
+  });
+
+  const desc = document.querySelector(".desc-section");
+  if (!desc) return;
+
+  const marketId = qs("marketId") || localStorage.getItem("selectedMarketId");
+  const storeId = qs("storeId") || localStorage.getItem("selectedStoreId");
+
+  try {
+    if (storeId) {
+      const data = await getStoreDetail(storeId);
+      renderStore(desc, data);
+      desc.addEventListener("click", async (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLElement)) return;
+        if (t.id === "recoBtn") {
+          try {
+            const reason = prompt("추천 사유(선택)") || "";
+            await postRecommendation(Number(data.id), reason);
+            alert("추천 완료! (인기 +3 반영)");
+          } catch (err) {
+            alert("추천 실패: " + err.message);
+          }
+        }
+        if (t.id === "backBtn") {
+          history.length > 1 ? history.back() : (location.href = "../index.html");
+        }
+      });
+      return;
+    }
+
+    if (marketId) {
+      const data = await getMarketDetail(marketId);
+      renderMarket(desc, data);
+      desc.addEventListener("click", (e) => {
+        const t = e.target;
+        if (!(t instanceof HTMLElement)) return;
+        const sid = t.dataset.storeId;
+        if (sid) location.href = `./chatpage.html?storeId=${encodeURIComponent(sid)}`;
+      });
+      return;
+    }
+
+    desc.innerHTML = `
+      <div>
+        <h3 style="margin:0 0 8px">무엇을 보고 싶나요?</h3>
+        <p style="margin:0">메인에서 시장 또는 인기 매장을 클릭해 들어오면 여기에 표시됩니다.</p>
+      </div>
+    `;
+  } catch (e) {
+    desc.innerHTML = `
+      <div style="color:#ffb4b4">
+        <h3 style="margin:0 0 8px">로드 실패</h3>
+        <p style="margin:0">${e.message}</p>
+      </div>
+    `;
+  }
 });

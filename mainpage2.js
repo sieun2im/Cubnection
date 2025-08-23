@@ -78,3 +78,114 @@ function switchTab(btn, type) {
         window.location.href = 'mainpage2.html';
     }
 }
+    (() => {
+    const API_BASE = '/api';
+
+    async function api(url, opts) {
+        const res = await fetch(url, opts);
+        if (!res.ok) {
+        const t = await res.text().catch(()=>'');
+        throw new Error(`${res.status} ${res.statusText} - ${t || '요청 실패'}`);
+        }
+        return res.json();
+    }
+
+    const fetchMarkets = () => api(`${API_BASE}/markets`);       
+    const fetchPopular = () => api(`${API_BASE}/stores/popular`);      
+    const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);   
+    function hydrateMarketsIntoCarousel(markets) {
+        const track = document.querySelector('.track');
+        if (!track) return;
+        const cards = Array.from(track.querySelectorAll('.card-lg'));
+        const list = Array.isArray(markets) ? markets.slice(0, 12) : [];
+        const attachCardClick = (card) => {
+        card.addEventListener('click', () => {
+            const goto = card.dataset.link || '#';
+            window.location.href = goto;
+        });
+        };
+        let i = 0;
+        for (; i < cards.length && i < list.length; i++) {
+        const m = list[i];
+        const card = cards[i];
+        card.dataset.type = 'market';
+        card.dataset.id = String(m.id);
+        card.dataset.link = `../chatpage/chatpage.html?marketId=${encodeURIComponent(m.id)}`;
+        const img = card.querySelector('img') || document.createElement('img');
+        if (!img.parentNode) card.prepend(img);
+        if (!img.getAttribute('src')) img.setAttribute('src', 'Rectangle1.png');
+        let overlay = card.querySelector('.overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            card.appendChild(overlay);
+        }
+        overlay.innerHTML = `${m.name}${m.location ? `<br/><span style="font-size:12px;opacity:.9">${m.location}</span>` : ''}`;
+        if (!card.dataset.addonBound) {
+            attachCardClick(card);
+            card.dataset.addonBound = '1';
+        }
+        }
+        for (; i < list.length; i++) {
+        const m = list[i];
+        const card = document.createElement('article');
+        card.className = 'card-lg';
+        card.dataset.type = 'market';
+        card.dataset.id = String(m.id);
+        card.dataset.link = `../chatpage/chatpage.html?marketId=${encodeURIComponent(m.id)}`;
+        card.innerHTML = `
+            <img src="Rectangle1.png" alt="" />
+            <div class="overlay">${m.name}${m.location ? `<br/><span style="font-size:12px;opacity:.9">${m.location}</span>` : ''}</div>
+        `;
+        attachCardClick(card);
+        track.appendChild(card);
+        }
+    }
+    function renderPopularIntoBenefits(popular) {
+        const ul = document.querySelector('.benefits');
+        if (!ul) return;
+        ul.removeAttribute('data-link');
+        ul.innerHTML = '';
+        const list = Array.isArray(popular) ? popular.slice(0, 10) : [];
+        if (list.length === 0) {
+        ul.innerHTML = `
+            <li class="benefit">
+            <div class="b-text">
+                <strong>실시간 인기 매장 없음</strong>
+                <p>검색/추천이 쌓이면 여기에서 Top10을 볼 수 있어요.</p>
+            </div>
+            </li>`;
+        return;
+        }
+        list.forEach((p, idx) => {
+        const li = document.createElement('li');
+        li.className = 'benefit';
+        li.dataset.storeId = String(p.id);
+        li.innerHTML = `
+            <img src="Rectangle${(idx % 8) + 1}.png" alt="" />
+            <div class="b-text">
+            <strong>${p.name}</strong><br/>
+            <span class="sub">${p.category || '-'} · <b>${p.searchCount}</b>회 검색</span>
+            <p>지금 가장 주목받는 상점이에요. 눌러서 상세 보러 가기!</p>
+            </div>
+        `;
+        li.addEventListener('click', () => {
+            localStorage.setItem('selectedStoreId', String(p.id));
+            window.location.href = `../chatpage/chatpage.html?storeId=${encodeURIComponent(p.id)}`;
+        });
+        ul.appendChild(li);
+        });
+    }
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+        const [markets, popular] = await Promise.all([
+            fetchMarkets().catch(e => { console.warn('시장 리스트 실패:', e.message); return []; }),
+            fetchPopular().catch(e => { console.warn('인기 Top10 실패:', e.message); return []; }),
+        ]);
+        hydrateMarketsIntoCarousel(markets);
+        renderPopularIntoBenefits(popular);
+        } catch (e) {
+        console.error('[ADD-ON init error]', e);
+        }
+    });
+    })();
