@@ -11,11 +11,17 @@ function qs(name) {
 
 async function api(url, opts) {
   const res = await fetch(url, { cache: "no-store", ...opts });
+  const ct = res.headers.get("content-type") || "";
   if (!res.ok) {
     const t = await res.text().catch(() => "");
-    throw new Error(`${res.status} ${res.statusText} - ${t || "요청 실패"}`);
+    throw new Error(`${res.status} ${res.statusText}${t ? " - " + t : ""}`);
   }
-  return res.json();
+  if (res.status === 204) return null;
+  if (ct.includes("application/json")) {
+    return res.json().catch(() => ({}));
+  }
+  const text = await res.text().catch(() => "");
+  return text || null;
 }
 
 const getMarketDetail = (id) => api(`${API_BASE}/markets/${encodeURIComponent(id)}`);
@@ -25,7 +31,7 @@ const postRecommendation = (shopId, reason) =>
   api(`${API_BASE}/recommendations`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ shopId, reason: reason || undefined }),
+    body: JSON.stringify({ shopId: Number(shopId), reason: reason || undefined }),
   });
 
 function renderMarket(desc, market, stores) {
@@ -40,7 +46,9 @@ function renderMarket(desc, market, stores) {
         list.length === 0
           ? `<div>등록된 가게가 없습니다.</div>`
           : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
-              ${list.map(s => `
+              ${list
+                .map(
+                  (s) => `
                 <li data-store-id="${s.id}" style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
                   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
                     <div>
@@ -48,7 +56,9 @@ function renderMarket(desc, market, stores) {
                       <div style="margin-top:4px">${s.description || ""}</div>
                     </div>
                   </div>
-                </li>`).join("")}
+                </li>`
+                )
+                .join("")}
             </ul>`
       }
     </div>
@@ -73,8 +83,8 @@ function renderStore(desc, data) {
 
 function showReasonModal() {
   return new Promise((resolve) => {
-    const backdrop = document.createElement('div');
-    backdrop.className = 'reco-backdrop';
+    const backdrop = document.createElement("div");
+    backdrop.className = "reco-backdrop";
     backdrop.innerHTML = `
       <div class="reco-modal" role="dialog" aria-modal="true" aria-label="추천 사유 입력">
         <button class="reco-close" aria-label="닫기">×</button>
@@ -86,19 +96,32 @@ function showReasonModal() {
         </div>
       </div>`;
     document.body.appendChild(backdrop);
-    const input = backdrop.querySelector('textarea');
+
+    const input = backdrop.querySelector("textarea");
     input.focus();
-    function done(v){ backdrop.remove(); resolve(v); }
-    backdrop.addEventListener('click', e => { if (e.target === backdrop) done(""); });
-    backdrop.querySelector('.reco-close').addEventListener('click', () => done(""));
-    backdrop.querySelector('[data-skip]').addEventListener('click', () => done(""));
-    backdrop.querySelector('[data-submit]').addEventListener('click', () => done(input.value.trim()));
-    input.addEventListener('keydown', e => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') done(input.value.trim());
-      if (e.key === 'Escape') done("");
+
+    function close(action, payload) {
+      backdrop.remove();
+      resolve({ action, reason: payload || "" });
+    }
+
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) close("close");
     });
-    function onEsc(e){ if (e.key === 'Escape') { window.removeEventListener('keydown', onEsc); done(""); } }
-    window.addEventListener('keydown', onEsc);
+    backdrop.querySelector(".reco-close").addEventListener("click", () => close("close"));
+    backdrop.querySelector("[data-skip]").addEventListener("click", () => close("skip"));
+    backdrop.querySelector("[data-submit]").addEventListener("click", () => close("submit", input.value.trim()));
+    input.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") close("submit", input.value.trim());
+      if (e.key === "Escape") close("close");
+    });
+    function onEsc(e) {
+      if (e.key === "Escape") {
+        window.removeEventListener("keydown", onEsc);
+        close("close");
+      }
+    }
+    window.addEventListener("keydown", onEsc);
   });
 }
 
@@ -129,20 +152,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (storeId) {
       const data = await getStoreDetail(storeId);
       renderStore(desc, data);
+
       desc.addEventListener("click", async (e) => {
         const t = e.target;
         if (!(t instanceof HTMLElement)) return;
+
         if (t.id === "recoBtn") {
           e.preventDefault();
           e.stopPropagation();
           try {
-            const reason = (await showReasonModal()) ?? "";
-            await postRecommendation(Number(data.id), reason);
+            const { action, reason } = await showReasonModal();
+            if (action !== "submit") return;
+            await postRecommendation(data.id, reason);
             alert("추천 완료! (인기 +3 반영)");
           } catch (err) {
             alert("추천 실패: " + err.message);
           }
         }
+
         if (t.id === "backBtn") {
           e.preventDefault();
           e.stopPropagation();
@@ -156,10 +183,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       const market = await getMarketDetail(marketId);
       const stores = await getStoresByMarket(marketId);
       renderMarket(desc, market, stores);
+
       desc.addEventListener("click", (e) => {
-        const el = (e.target instanceof HTMLElement) ? e.target.closest('[data-store-id]') : null;
+        const el = e.target instanceof HTMLElement ? e.target.closest("[data-store-id]") : null;
         if (!el) return;
-        const sid = el.getAttribute('data-store-id');
+        const sid = el.getAttribute("data-store-id");
         if (sid) {
           e.preventDefault();
           e.stopPropagation();
