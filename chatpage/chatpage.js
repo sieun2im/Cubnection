@@ -89,7 +89,7 @@ function renderStore(desc, data) {
         <button id="recoBtn" type="button">⭐ 추천하기(인기 +3)</button>
         <button id="backBtn" type="button">← 뒤로</button>
       </div>
-      <div style="opacity:.7;margin-top:12px;font-size:12px">/api/stores/{id} 응답에는 주소/영업시간이 포함되지 않습니다.</div>
+      <div style="opacity:.7;margin-top:12px;font-size:12px">주소/영업시간이 포함되지 않습니다.</div>
     </div>
   `;
 }
