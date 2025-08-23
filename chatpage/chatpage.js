@@ -28,29 +28,23 @@ const getMarketDetail = (id) => api(`${API_BASE}/markets/${encodeURIComponent(id
 const getStoresByMarket = (id) => api(`${API_BASE}/stores?marketId=${encodeURIComponent(id)}`);
 const getStoreDetail = (id) => api(`${API_BASE}/stores/${encodeURIComponent(id)}`);
 
-async function postRecommendationRobust(shopId, reason) {
+async function postRecommendationSilent(shopId, reason) {
   const idNum = Number(shopId);
-  const tries = [
+  const payloads = [
     { shopId: idNum, reason: reason || undefined },
     { shopId: idNum, reason: reason || "" },
     { storeId: idNum, reason: reason || "" }
   ];
-  let lastErr;
-  for (const body of tries) {
+  for (const body of payloads) {
     try {
       const r = await fetch(`${API_BASE}/recommendations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
-      if (r.ok) return true;
-      const txt = await r.text().catch(() => "");
-      lastErr = new Error(`${r.status} ${r.statusText}${txt ? " - " + txt : ""}`);
-    } catch (e) {
-      lastErr = e;
-    }
+      if (r.ok) return;
+    } catch (_) {}
   }
-  throw lastErr || new Error("추천 실패");
 }
 
 function renderMarket(desc, market, stores) {
@@ -111,15 +105,12 @@ function showReasonModal() {
         </div>
       </div>`;
     document.body.appendChild(backdrop);
-
     const input = backdrop.querySelector("textarea");
     input.focus();
-
     function close(action, payload) {
       backdrop.remove();
       resolve({ action, reason: payload || "" });
     }
-
     backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close("close"); });
     backdrop.querySelector(".reco-close").addEventListener("click", () => close("close"));
     backdrop.querySelector("[data-skip]").addEventListener("click", () => close("close"));
@@ -158,23 +149,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (storeId) {
       const data = await getStoreDetail(storeId);
       renderStore(desc, data);
-
       desc.addEventListener("click", async (e) => {
         const t = e.target;
         if (!(t instanceof HTMLElement)) return;
-
         if (t.id === "recoBtn") {
           e.preventDefault(); e.stopPropagation();
-          try {
-            const { action, reason } = await showReasonModal();
-            if (action !== "submit") return;
-            await postRecommendationRobust(data.id, reason);
-            alert("추천 완료! (인기 +3 반영)");
-          } catch (err) {
-            alert("추천 실패: " + err.message);
+          const { action, reason } = await showReasonModal();
+          if (action === "submit") {
+            postRecommendationSilent(data.id, reason);
           }
         }
-
         if (t.id === "backBtn") {
           e.preventDefault(); e.stopPropagation();
           history.length > 1 ? history.back() : (location.href = "../index.html");
