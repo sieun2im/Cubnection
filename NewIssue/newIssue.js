@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const createIssue = (issue) => {
             const issues = document.createElement('div');
             issues.classList.add('issues');
+            issues.addEventListener('click', window.localStorage(`../chatpage/chatpage.html?marketId=${encodeURIComponent(issue.id)}`))
 
             const issueImg = document.createElement('img');
             // issueImg.setAttribute('src',);
