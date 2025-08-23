@@ -2,9 +2,9 @@ const issuesPage = document.querySelector('.issuesPage');
 
 
 
-const issueList = [];
 
-document.addEventListener('DOMContentLoaded', async function () {
+
+async function getIssues() {
 
     try {
         const res = await fetch('/api/stores/popular', {
@@ -18,13 +18,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.log(res.status);
         }
 
-        issueList = await res.json()
+        const data = await res.json();
+        return data;
 
     } catch (error) {
         console.log(error)
     }
-})
+}
 
+const issueList = getIssues();
 
 
 const createIssue = (issue) => {
