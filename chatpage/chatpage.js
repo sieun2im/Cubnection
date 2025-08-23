@@ -39,21 +39,21 @@ function renderMarket(desc, data) {
         stores.length === 0
           ? `<div>등록된 가게가 없습니다.</div>`
           : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
-               ${stores
-                 .map(
-                   (s) => `
-                 <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
-                   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
-                     <div>
-                       <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
-                       <div style="margin-top:4px">${s.description || ""}</div>
-                     </div>
-                     <button type="button" data-store-id="${s.id}" class="btn-detail">상세</button>
-                   </div>
-                 </li>`
-                 )
-                 .join("")}
-             </ul>`
+              ${stores
+                .map(
+                  (s) => `
+                <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
+                  <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+                    <div>
+                      <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
+                      <div style="margin-top:4px">${s.description || ""}</div>
+                    </div>
+                    <button type="button" data-store-id="${s.id}" class="btn-detail">상세</button>
+                  </div>
+                </li>`
+                )
+                .join("")}
+            </ul>`
       }
     </div>
   `;
@@ -84,8 +84,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   const desc = document.querySelector(".desc-section");
   if (!desc) return;
 
-  const marketId = qs("marketId") || localStorage.getItem("selectedMarketId");
-  const storeId = qs("storeId") || localStorage.getItem("selectedStoreId");
+  const urlMarketId = qs("marketId");
+  const urlStoreId = qs("storeId");
+  let marketId = null;
+  let storeId = null;
+
+  if (urlStoreId) {
+    storeId = urlStoreId;
+  } else if (urlMarketId) {
+    marketId = urlMarketId;
+  } else {
+    storeId = localStorage.getItem("selectedStoreId");
+    marketId = storeId ? null : localStorage.getItem("selectedMarketId");
+  }
 
   try {
     if (storeId) {
