@@ -10,7 +10,7 @@ function qs(name) {
 }
 
 async function api(url, opts) {
-  const res = await fetch(url, opts);
+  const res = await fetch(url, { cache: "no-store", ...opts });
   if (!res.ok) {
     const t = await res.text().catch(() => "");
     throw new Error(`${res.status} ${res.statusText} - ${t || "요청 실패"}`);
@@ -18,9 +18,9 @@ async function api(url, opts) {
   return res.json();
 }
 
-const getMarketDetail = (id) => api(`${API_BASE}/markets/${id}`);
-const getStoresByMarket = (id) => api(`${API_BASE}/stores?marketId=${id}`);
-const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
+const getMarketDetail = (id) => api(`${API_BASE}/markets/${encodeURIComponent(id)}`);
+const getStoresByMarket = (id) => api(`${API_BASE}/stores?marketId=${encodeURIComponent(id)}`);
+const getStoreDetail = (id) => api(`${API_BASE}/stores/${encodeURIComponent(id)}`);
 const postRecommendation = (shopId, reason) =>
   api(`${API_BASE}/recommendations`, {
     method: "POST",
@@ -28,35 +28,29 @@ const postRecommendation = (shopId, reason) =>
     body: JSON.stringify({ shopId, reason: reason || undefined }),
   });
 
-function renderMarket(desc, data, storesOverride) {
-  const stores = Array.isArray(storesOverride) ? storesOverride
-               : Array.isArray(data.stores) ? data.stores
-               : [];
+function renderMarket(desc, market, stores) {
+  const list = Array.isArray(stores) ? stores : [];
   desc.innerHTML = `
     <div>
-      <h2 style="margin:0 0 8px">${data.name}</h2>
-      <div style="opacity:.8;margin-bottom:8px">${data.location || ""}</div>
-      <p style="margin:0 0 16px">${data.description || ""}</p>
+      <h2 style="margin:0 0 8px">${market.name}</h2>
+      <div style="opacity:.8;margin-bottom:8px">${market.location || ""}</div>
+      <p style="margin:0 0 16px">${market.description || ""}</p>
       <h3 style="margin:0 0 8px">가게 리스트</h3>
       ${
-        stores.length === 0
+        list.length === 0
           ? `<div>등록된 가게가 없습니다.</div>`
           : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
-               ${stores
-                 .map(
-                   (s) => `
-                 <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
-                   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
-                     <div>
-                       <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
-                       <div style="margin-top:4px">${s.description || ""}</div>
-                     </div>
-                     <button type="button" data-store-id="${s.id}" class="btn-detail">상세</button>
-                   </div>
-                 </li>`
-                 )
-                 .join("")}
-             </ul>`
+              ${list.map(s => `
+                <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px">
+                  <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+                    <div>
+                      <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
+                      <div style="margin-top:4px">${s.description || ""}</div>
+                    </div>
+                    <button type="button" data-store-id="${s.id}" class="btn-detail">상세</button>
+                  </div>
+                </li>`).join("")}
+            </ul>`
       }
     </div>
   `;
@@ -125,14 +119,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (marketId) {
-      const m = await getMarketDetail(marketId);
-      let stores = Array.isArray(m.stores) ? m.stores : [];
-      if (stores.length === 0) {
-        try {
-          stores = await getStoresByMarket(m.id);
-        } catch (_) {}
-      }
-      renderMarket(desc, m, stores);
+      const market = await getMarketDetail(marketId);
+      const stores = await getStoresByMarket(marketId);  // ← 항상 별도 호출
+      renderMarket(desc, market, stores);
       desc.addEventListener("click", (e) => {
         const t = e.target;
         if (!(t instanceof HTMLElement)) return;
