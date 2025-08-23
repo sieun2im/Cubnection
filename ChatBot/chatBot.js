@@ -61,7 +61,7 @@ const createC = () => {
 
     chatP.scrollTop = chatP.scrollHeight;
 
-    input.value = "";
+
 }
 
 async function enterP(e) {
@@ -89,6 +89,7 @@ async function enterP(e) {
         }
 
 
+
         // try {
         //     const res = await fetch("/api/chatbot/ask-lc4j", {
         //         method: "POST",
@@ -106,6 +107,8 @@ async function enterP(e) {
         // } catch (error) {
         //     console.log(error);
         // }
+
+        input.value = "";
 
 
 
