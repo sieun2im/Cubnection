@@ -16,11 +16,11 @@ function qs(name) {
 }
 
 async function api(url, opts) {
-  const res = await fetch(url, { cache: "no-store", ...opts }).catch(() => ({ ok:false, status:0, text:async()=>"" }));
-  const ct = (res && res.headers && res.headers.get && res.headers.get("content-type")) || "";
+  const res = await fetch(url, { cache: "no-store", ...opts });
+  const ct = res.headers.get("content-type") || "";
   if (!res.ok) {
     const t = await res.text().catch(() => "");
-    throw new Error(`${res.status} ${t ? " - " + t : ""}`);
+    throw new Error(`${res.status}${t ? " - " + t : ""}`);
   }
   if (res.status === 204) return null;
   if (ct.includes("application/json")) return res.json().catch(() => ({}));
@@ -32,15 +32,13 @@ const getMarketDetail = (id) => api(`${API_BASE}/markets/${encodeURIComponent(id
 const getStoresByMarket = (id) => api(`${API_BASE}/stores?marketId=${encodeURIComponent(id)}`);
 const getStoreDetail = (id) => api(`${API_BASE}/stores/${encodeURIComponent(id)}`);
 
-async function recommendBestEffort(store) {
-  const shopId = Number(store.id);
-  const reason = window.__lastRecoReason || "";
+async function increasePopularityBestEffort(store) {
   try {
     const r = await fetch(`${API_BASE}/recommendations`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ shopId, reason })
-    }).catch(()=>null);
+      body: JSON.stringify({ shopId: Number(store.id) })
+    }).catch(() => null);
     if (r && r.ok) return;
   } catch(_) {}
   try {
@@ -96,49 +94,11 @@ function renderStore(desc, data) {
   `;
 }
 
-function showReasonModal() {
-  return new Promise((resolve) => {
-    const backdrop = document.createElement("div");
-    backdrop.className = "reco-backdrop";
-    backdrop.innerHTML = `
-      <div class="reco-modal" role="dialog" aria-modal="true" aria-label="추천 사유 입력">
-        <button class="reco-close" aria-label="닫기">×</button>
-        <h3>추천 사유(선택)</h3>
-        <textarea placeholder="예) 사장님이 친절해요 · 고기가 신선해요" maxlength="200"></textarea>
-        <div class="reco-actions">
-          <button type="button" data-skip>건너뛰기</button>
-          <button type="button" data-submit>추천하기</button>
-        </div>
-      </div>`;
-    document.body.appendChild(backdrop);
-    const input = backdrop.querySelector("textarea");
-    input.focus();
-    function close(action, payload) {
-      try { window.__lastRecoReason = payload || ""; } catch(_){}
-      backdrop.remove();
-      resolve({ action, reason: payload || "" });
-    }
-    backdrop.addEventListener("click", (e) => { if (e.target === backdrop) close("close"); });
-    backdrop.querySelector(".reco-close").addEventListener("click", () => close("close"));
-    backdrop.querySelector("[data-skip]").addEventListener("click", () => close("close"));
-    backdrop.querySelector("[data-submit]").addEventListener("click", () => close("submit", input.value.trim()));
-    input.addEventListener("keydown", (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") close("submit", input.value.trim());
-      if (e.key === "Escape") close("close");
-    });
-    function onEsc(e){ if (e.key === "Escape") { window.removeEventListener("keydown", onEsc); close("close"); } }
-    window.addEventListener("keydown", onEsc);
-  });
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
-  const closeEl = document.querySelector(".close-icon");
-  if (closeEl) {
-    closeEl.addEventListener("click", (e) => {
-      e.stopPropagation();
-      window.location.href = "../index.html";
-    });
-  }
+  document.querySelector(".close-icon")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    window.location.href = "../index.html";
+  });
 
   const desc = document.querySelector(".desc-section");
   if (!desc) return;
@@ -161,16 +121,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (storeId) {
       const data = await getStoreDetail(storeId);
       renderStore(desc, data);
+
       desc.addEventListener("click", async (e) => {
         const t = e.target;
         if (!(t instanceof HTMLElement)) return;
+
         if (t.id === "recoBtn") {
           e.preventDefault(); e.stopPropagation();
-          const { action, reason } = await showReasonModal();
-          if (action === "submit") {
-            await recommendBestEffort(data);
-          }
+          const btn = t;
+          const prev = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = "처리 중...";
+          await increasePopularityBestEffort(data);
+          btn.textContent = "추천 완료!";
+          setTimeout(() => { btn.textContent = prev; btn.disabled = false; }, 1200);
         }
+
         if (t.id === "backBtn") {
           e.preventDefault(); e.stopPropagation();
           history.length > 1 ? history.back() : (location.href = "../index.html");
