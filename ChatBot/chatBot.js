@@ -75,7 +75,7 @@ async function enterP(e) {
 
         try {
             console.log(input.value);
-            const res = await fetch(`/api/chatbot?q=${input.value}`);
+            const res = await fetch(`/api/chatbot?q= "${input.value}"`);
 
             if (res.ok) {
                 answer = await res.text();
