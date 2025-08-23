@@ -88,19 +88,23 @@
     .desc-section h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:2px}
     .desc-section h3{font-size:16px;font-weight:600;color:#eee;margin-top:18px}
 
-    .desc-section ul{margin-top:8px}
+    .desc-section ul{margin:8px 0 0; padding:0}
     .desc-section ul li{
-    background: rgba(255,255,255,0.03);
-    border: 1px solid #2a2a2a !important;
-    border-radius: 14px !important;
-    padding: 12px 12px !important;
-    transition: background .15s ease, box-shadow .15s ease, transform .08s ease;
-    cursor: pointer;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 8px 0 !important;
+    cursor: default !important;
+    box-shadow: none !important;
+    transition: none !important;
+    }
+    .desc-section ul li + li{
+    border-top: 1px solid rgba(255,255,255,.08);
     }
     .desc-section ul li:hover{
-    background: rgba(255,255,255,0.06);
-    box-shadow: 0 6px 14px rgba(0,0,0,.25);
-    transform: translateY(-1px);
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
     }
 
     .desc-section button{
