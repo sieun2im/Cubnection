@@ -46,14 +46,15 @@
 
     .main-title{
     position: absolute;
-    font-family: Pretendard;
     left: 31px;
     right: 16px;
     bottom: 20px;
+    font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, sans-serif;
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 31px;
     color: #DEDDE0;
+    text-shadow: 0 2px 8px rgba(0,0,0,.35);
     }
 
     .desc-section {
@@ -61,7 +62,7 @@
     margin-top: -14px;
     padding: calc(20px + 14px) 20px 20px;
     color: #DEDDE0;
-    font-family: 'Pretendard', sans-serif;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 29px;
@@ -86,3 +87,51 @@
     width: 0;
     height: 0;
     }
+
+    .desc-section h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:2px}
+    .desc-section h3{font-size:16px;font-weight:600;color:#eee;margin-top:18px}
+
+    .desc-section ul{margin-top:8px}
+    .desc-section ul li{
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #2a2a2a !important;
+    border-radius: 14px !important;
+    padding: 12px 12px !important;
+    transition: background .15s ease, box-shadow .15s ease, transform .08s ease;
+    }
+    .desc-section ul li:hover{
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 6px 14px rgba(0,0,0,.25);
+    transform: translateY(-1px);
+    }
+
+    .desc-section button{
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1;
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 14px;
+    cursor: pointer;
+    }
+
+    .desc-section button#recoBtn{
+    background: linear-gradient(135deg,#9b7bff 0%, #7c5cff 100%);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(124,92,255,.35);
+    }
+
+    .desc-section button#backBtn{
+    background: rgba(255,255,255,.08);
+    color: #e5e5e5;
+    border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .desc-section button[data-store-id]{
+    background: rgba(255,255,255,.08);
+    color: #e8e8e8;
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 8px 12px;
+    }
+
+    .desc-section small{color:#bfbfc2}

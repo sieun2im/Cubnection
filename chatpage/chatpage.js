@@ -47,6 +47,7 @@ function renderMarket(desc, market, stores) {
                       <strong>${s.name}</strong> <small style="opacity:.8">${s.category || "-"}</small>
                       <div style="margin-top:4px">${s.description || ""}</div>
                     </div>
+                    <button type="button" data-store-id="${s.id}">상세</button>
                   </div>
                 </li>`).join("")}
             </ul>`
@@ -69,6 +70,58 @@ function renderStore(desc, data) {
       <div style="opacity:.7;margin-top:12px;font-size:12px">/api/stores/{id} 응답에는 주소/영업시간이 포함되지 않습니다.</div>
     </div>
   `;
+}
+
+function ensureReasonModalStyle() {
+  if (document.getElementById('reco-modal-style')) return;
+  const css = `
+  .reco-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;z-index:9999}
+  .reco-modal{position:relative;width:min(92vw,420px);background:#1f1f1f;color:#dedde0;border:1px solid #2f2f2f;border-radius:16px;padding:18px 16px 14px;box-shadow:0 12px 32px rgba(0,0,0,.35)}
+  .reco-modal h3{margin:0 0 10px;font-size:16px;font-weight:700}
+  .reco-modal textarea{width:100%;height:110px;background:#0f0f0f;border:1px solid #333;color:#fff;border-radius:12px;padding:12px;resize:none;outline:none}
+  .reco-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+  .reco-actions button{border:0;border-radius:999px;padding:10px 14px;cursor:pointer;font-family:inherit}
+  .reco-actions [data-skip]{background:#2c2c2c;color:#ddd}
+  .reco-actions [data-submit]{background:linear-gradient(135deg,#9b7bff 0%, #7c5cff 100%);color:#fff;box-shadow:0 6px 14px rgba(124,92,255,.35)}
+  .reco-close{position:absolute;top:8px;right:10px;background:transparent;border:0;color:#aaa;font-size:20px;line-height:1;cursor:pointer}
+  .reco-close:hover{color:#fff}
+  `;
+  const style = document.createElement('style');
+  style.id = 'reco-modal-style';
+  style.textContent = css;
+  document.head.appendChild(style);
+}
+
+function showReasonModal() {
+  ensureReasonModalStyle();
+  return new Promise((resolve) => {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'reco-backdrop';
+    backdrop.innerHTML = `
+      <div class="reco-modal" role="dialog" aria-modal="true" aria-label="추천 사유 입력">
+        <button class="reco-close" aria-label="닫기">×</button>
+        <h3>추천 사유(선택)</h3>
+        <textarea placeholder="예) 사장님이 친절해요 · 고기가 신선해요" maxlength="200"></textarea>
+        <div class="reco-actions">
+          <button type="button" data-skip>건너뛰기</button>
+          <button type="button" data-submit>추천하기</button>
+        </div>
+      </div>`;
+    document.body.appendChild(backdrop);
+    const input = backdrop.querySelector('textarea');
+    input.focus();
+    function done(v){ backdrop.remove(); resolve(v); }
+    backdrop.addEventListener('click', e => { if (e.target === backdrop) done(""); });
+    backdrop.querySelector('.reco-close').addEventListener('click', () => done(""));
+    backdrop.querySelector('[data-skip]').addEventListener('click', () => done(""));
+    backdrop.querySelector('[data-submit]').addEventListener('click', () => done(input.value.trim()));
+    input.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') done(input.value.trim());
+      if (e.key === 'Escape') done("");
+    });
+    function onEsc(e){ if (e.key === 'Escape') { window.removeEventListener('keydown', onEsc); done(""); } }
+    window.addEventListener('keydown', onEsc);
+  });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -103,7 +156,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!(t instanceof HTMLElement)) return;
         if (t.id === "recoBtn") {
           try {
-            const reason = prompt("추천 사유(선택)") || "";
+            const reason = (await showReasonModal()) ?? "";
             await postRecommendation(Number(data.id), reason);
             alert("추천 완료! (인기 +3 반영)");
           } catch (err) {
@@ -119,12 +172,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (marketId) {
       const market = await getMarketDetail(marketId);
-      const stores = await getStoresByMarket(marketId);  // ← 항상 별도 호출
+      const stores = await getStoresByMarket(marketId);
       renderMarket(desc, market, stores);
       desc.addEventListener("click", (e) => {
         const t = e.target;
         if (!(t instanceof HTMLElement)) return;
-        const sid = t.dataset.storeId;
+        const sid = t.getAttribute('data-store-id');
         if (sid) location.href = `./chatpage.html?storeId=${encodeURIComponent(sid)}`;
       });
       return;
