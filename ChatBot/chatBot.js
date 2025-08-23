@@ -171,7 +171,8 @@ async function clickQBtn(e) {
             console.log(res.status)
         }
         const recomendA = await res.json();
-        console.log(recomendA);
+        console.log(recomendA.answer);
+        createBC(recomendA.answer);
     } catch (error) {
         console.log(error)
     }
