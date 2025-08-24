@@ -150,7 +150,7 @@ async function enterP(e) {
     }
 }
 
-//화면전환, 추천질문 응답 API
+//추천질문 응답 API
 async function clickQBtn(e) {
     helloP.classList = 'none';
     bestQ.classList = 'none';
@@ -178,10 +178,35 @@ async function clickQBtn(e) {
     input.value = "";
 }
 
+
+async function clickUpApi(e) {
+    try {
+        const res = await fetch(`/api/chatbot/suggestions/${e.target.id.slice(1)}/click`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        if (!res.ok) {
+            console.log(res.status)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 qBtn[0].addEventListener('click', clickQBtn);
 qBtn[1].addEventListener('click', clickQBtn);
 qBtn[2].addEventListener('click', clickQBtn);
 qBtn[3].addEventListener('click', clickQBtn);
 qBtn[4].addEventListener('click', clickQBtn);
+
+qBtn[0].addEventListener('click', clickUpApi);
+qBtn[1].addEventListener('click', clickUpApi);
+qBtn[2].addEventListener('click', clickUpApi);
+qBtn[3].addEventListener('click', clickUpApi);
+qBtn[4].addEventListener('click', clickUpApi);
+
 input.addEventListener('keypress', enterP);
 
