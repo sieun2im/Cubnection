@@ -3,9 +3,7 @@ const chatP = document.querySelector('#chatP');
 const helloP = document.querySelector('#helloP');
 const bestQ = document.querySelector('#bestQ');
 
-const q1Btn = document.querySelector('#q1');
-const q2Btn = document.querySelector('#q2');
-const q3Btn = document.querySelector('#q3');
+
 const qBtn = document.querySelectorAll('#bestQ>button')
 
 
@@ -29,8 +27,9 @@ document.addEventListener("DOMContentLoaded", async function recomendQ() {
 
         let i = 0;
         qBtn.forEach(btn => {
-            console.log(btn.id);
+            btn.setAttribute('id', data[i].id)
             btn.textContent = data[i].text;
+            console.log(btn.id);
 
             i++;
         });
@@ -159,7 +158,7 @@ async function clickQBtn(e) {
     createC();
 
     try {
-        const res = await fetch(`/api/chatbot/ask-suggestion/${e.target.id.slice(1)}`, {
+        const res = await fetch(`/api/chatbot/ask-suggestion/${e.target.id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -181,7 +180,7 @@ async function clickQBtn(e) {
 
 async function clickUpApi(e) {
     try {
-        const res = await fetch(`/api/chatbot/suggestions/${e.target.id.slice(1)}/click`, {
+        const res = await fetch(`/api/chatbot/suggestions/${e.target.id}/click`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
