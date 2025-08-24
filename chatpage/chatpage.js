@@ -1,7 +1,7 @@
-(function(){
+(function () {
   window.addEventListener('error', e => { e.preventDefault(); });
   window.addEventListener('unhandledrejection', e => { e.preventDefault(); });
-  window.onerror = function(){ return true; };
+  window.onerror = function () { return true; };
 })();
 
 function goToPage() {
@@ -40,15 +40,15 @@ async function increasePopularityBestEffort(store) {
       body: JSON.stringify({ shopId: Number(store.id) })
     }).catch(() => null);
     if (r && r.ok) return;
-  } catch(_) {}
+  } catch (_) { }
   try {
     const kw = encodeURIComponent(String(store.name || "").trim());
     if (kw) {
-      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(()=>{});
-      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(()=>{});
-      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(()=>{});
+      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(() => { });
+      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(() => { });
+      await fetch(`${API_BASE}/stores/search?keyword=${kw}`).catch(() => { });
     }
-  } catch(_) {}
+  } catch (_) { }
 }
 
 function renderMarket(desc, market, stores) {
@@ -59,10 +59,9 @@ function renderMarket(desc, market, stores) {
       <div style="opacity:.8;margin-bottom:8px">${market.location || ""}</div>
       <p style="margin:0 0 16px">${market.description || ""}</p>
       <h3 style="margin:0 0 8px">가게 리스트</h3>
-      ${
-        list.length === 0
-          ? `<div>등록된 가게가 없습니다.</div>`
-          : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
+      ${list.length === 0
+      ? `<div>등록된 가게가 없습니다.</div>`
+      : `<ul style="list-style:none;padding:0;margin:0;display:grid;gap:10px">
               ${list.map(s => `
                 <li style="border:1px solid #2a2a2a;border-radius:12px;padding:12px;cursor:default">
                   <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
@@ -73,7 +72,7 @@ function renderMarket(desc, market, stores) {
                   </div>
                 </li>`).join("")}
             </ul>`
-      }
+    }
     </div>
   `;
 }
@@ -114,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       storeId = localStorage.getItem("selectedStoreId");
       marketId = storeId ? null : localStorage.getItem("selectedMarketId");
-    } catch(_) {}
+    } catch (_) { }
   }
 
   try {
