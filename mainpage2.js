@@ -79,7 +79,7 @@ function switchTab(btn, type) {
     }
 }
 (() => {
-    const API_BASE = '/api';
+    const API_BASE = 'https://api.market-app.org/api';
     function cateImgSrc(category) {
         if (category === "정육점") return "../img/meat1.jpg";
         else if (category === "야채가게") return "../img/greenFood.jpg";
