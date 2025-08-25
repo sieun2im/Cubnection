@@ -77,7 +77,7 @@ function switchTab(btn, type) {
 
 document.addEventListener("DOMContentLoaded", async function () {
     try {
-        const res = await fetch(`${API_BASE}/api/markets`);
+        const res = await fetch(`/api/markets`);
         if (res.ok) {
             const markets = await res.json();
             console.log(markets);
