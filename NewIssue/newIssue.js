@@ -4,7 +4,7 @@ const issuesPage = document.querySelector('.issuesPage');
 
 const cateImg = (issueImg, category) => {
     if (category === "정육점") {
-        issueImg.setAttribute('src', "../img/meat.jpg");
+        issueImg.setAttribute('src', "../img/meat1.jpg");
     } else if (category === "야채가게") {
         issueImg.setAttribute('src', "../img/greenFood.jpg");
     } else if (category === "생선가게") {
