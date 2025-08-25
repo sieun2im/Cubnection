@@ -77,7 +77,7 @@ function switchTab(btn, type) {
 
 document.addEventListener("DOMContentLoaded", async function () {
     try {
-        const res = await fetch(`${API_BASE}/markets`);
+        const res = await fetch(`${API_BASE}/api/markets`);
         if (res.ok) {
             const markets = await res.json();
             console.log(markets);
@@ -114,9 +114,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         return res.json();
     }
 
-    const fetchMarkets = () => api(`${API_BASE}/markets`);
-    const fetchPopular = () => api(`${API_BASE}/stores/popular`);
-    const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
+    const fetchMarkets = () => api(`${API_BASE}/api/markets`);
+    const fetchPopular = () => api(`${API_BASE}/api/stores/popular`);
+    const getStoreDetail = (id) => api(`${API_BASE}/api/stores/${id}`);
 
     function hydrateMarketsIntoCarousel(markets) {
         const track = document.querySelector('.track');
