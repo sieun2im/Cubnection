@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             textH3.innerHTML = `${issue.category} · <b>${issue.searchCount}</b>회 검색`;
 
             const textP = document.createElement('p');
-            textP.textContent = "지금 가장 주목받는 상점이에요. 눌러서 상세 보러 가기!";
+            textP.innerHTML = "지금 가장 주목받는 상점이에요.<br/>눌러서 상세 보러 가기!";
 
             issueText.appendChild(textH2);
             issueText.appendChild(textH3);
