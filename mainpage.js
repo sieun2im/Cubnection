@@ -17,7 +17,7 @@ const svgDots = Array.from(document.querySelectorAll('.carousel-dots circle'));
 const arrowLeft = document.getElementById('dotLeft');
 const arrowRight = document.getElementById('dotRight');
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-function getStep() {
+function getStep() { 
     if (!track || !cards.length) return 0;
     const w = cards[0].getBoundingClientRect().width;
     const css = getComputedStyle(track);
