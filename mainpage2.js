@@ -80,7 +80,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         const res = await fetch(`/api/markets`);
         if (res.ok) {
             const markets = await res.json();
+            const marketss = markets.slice(3,6);
             console.log(markets);
+            console.log(marketss);
         } else {
             console.log(res.status);
         }
@@ -122,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const track = document.querySelector('.track');
         if (!track) return;
         const cards = Array.from(track.querySelectorAll('.card-lg'));
-        const list = Array.isArray(markets) ? markets.slice(0, 3) : [];
+        const list = Array.isArray(markets) ? markets.slice(3, 6) : [];
         let i = 0;
         for (; i < cards.length && i < list.length; i++) {
             const m = list[i];
