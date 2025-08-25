@@ -45,7 +45,7 @@
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    padding: 0 20px 90px;
+    padding: 0 20px 100px;
     }
     .scroll-area::-webkit-scrollbar { display: none; }
     .hero, .section { padding-left: 0; padding-right: 0; } 
