@@ -1,5 +1,3 @@
-const API_BASE = 'https://api.market-app.org';
-
 document.querySelectorAll('[data-link="../chatpage/chatpage.html"]').forEach((card, idx) => {
     card.addEventListener('click', () => {
         const goto = card.dataset.link || '#';
@@ -13,14 +11,12 @@ document.querySelectorAll('[data-link="../chatpage/chatpage.html"]').forEach((ca
         }
     });
 });
-
 const track = document.querySelector('.track');
 const cards = Array.from(document.querySelectorAll('.card-lg'));
 const svgDots = Array.from(document.querySelectorAll('.carousel-dots circle'));
 const arrowLeft = document.getElementById('dotLeft');
 const arrowRight = document.getElementById('dotRight');
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-
 function getStep() {
     if (!track || !cards.length) return 0;
     const w = cards[0].getBoundingClientRect().width;
@@ -28,8 +24,13 @@ function getStep() {
     const gap = parseFloat(css.columnGap || css.gap || '0') || 0;
     return w + gap;
 }
-function maxIndex() { return Math.max(0, cards.length - 1); }
-function getMaxScrollLeft() { return track ? Math.max(0, track.scrollWidth - track.clientWidth) : 0; }
+function maxIndex() {
+    return Math.max(0, cards.length - 1);
+}
+function getMaxScrollLeft() {
+    if (!track) return 0;
+    return Math.max(0, track.scrollWidth - track.clientWidth);
+}
 function indexFromScroll() {
     const step = getStep();
     if (!step) return 0;
@@ -40,7 +41,9 @@ function setActiveDot(activeIdx) {
         c.setAttribute('fill', i === activeIdx ? '#E8E4EB' : '#716F79')
     );
 }
-function updateDots() { setActiveDot(indexFromScroll()); }
+function updateDots() {
+    setActiveDot(indexFromScroll());
+}
 function goToIndex(i) {
     const step = getStep();
     if (!step) return;
@@ -57,7 +60,6 @@ svgDots.forEach((c, i) => {
     c.style.cursor = 'pointer';
     c.addEventListener('click', () => goToIndex(i));
 });
-
 document.querySelector('.ask')?.addEventListener('click', (e) => {
     e.stopPropagation();
     console.log('검색/질의 버튼 클릭');
@@ -66,34 +68,18 @@ document.querySelector('.speech-bubble')?.addEventListener('click', (e) => {
     e.stopPropagation();
     console.log('마이크 버튼 클릭');
 });
-
 function switchTab(btn, type) {
     const tabs = Array.from(document.querySelectorAll('.tabs .tab'));
     tabs.forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
-    if (type === '전통시장') window.location.href = 'mainpage.html';
-    else if (type === '재래시장') window.location.href = 'mainpage2.html';
-}
-
-let markets2;
-
-document.addEventListener("DOMContentLoaded", async function () {
-    try {
-        const res = await fetch(`/api/markets`);
-        if (res.ok) {
-            const markets = await res.json();
-            markets2 = markets.slice(3,6);
-            console.log(markets);
-            console.log(marketss);
-        } else {
-            console.log(res.status);
-        }
-    } catch (error) {
-        console.log(error);
+    if (type === '전통시장') {
+        window.location.href = 'mainpage.html';
+    } else if (type === '재래시장') {
+        window.location.href = 'mainpage2.html';
     }
-});
-
+}
 (() => {
+    const API_BASE = 'https://api.market-app.org/api';
     function cateImgSrc(category) {
         if (category === "정육점") return "../img/meat1.jpg";
         else if (category === "야채가게") return "../img/greenFood.jpg";
@@ -108,7 +94,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         else if (category === "떡집") return "../img/ddok.jpg";
         return "Rectangle1.png";
     }
-
     async function api(url, opts) {
         const res = await fetch(url, opts);
         if (!res.ok) {
@@ -117,16 +102,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         return res.json();
     }
-
-    const fetchMarkets = () => api(`${API_BASE}/api/markets`);
-    const fetchPopular = () => api(`${API_BASE}/api/stores/popular`);
-    const getStoreDetail = (id) => api(`${API_BASE}/api/stores/${id}`);
-
+    const fetchMarkets = () => api(`${API_BASE}/markets`);
+    const fetchPopular = () => api(`${API_BASE}/stores/popular`);
+    const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
     function hydrateMarketsIntoCarousel(markets) {
         const track = document.querySelector('.track');
         if (!track) return;
         const cards = Array.from(track.querySelectorAll('.card-lg'));
         const list = Array.isArray(markets) ? markets.slice(3, 6) : [];
+        const attachCardClick = (card) => {
+            card.addEventListener('click', () => {
+                const goto = card.dataset.link || '#';
+                window.location.href = goto;
+            });
+        };
         let i = 0;
         for (; i < cards.length && i < list.length; i++) {
             const m = list[i];
@@ -144,9 +133,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                 card.appendChild(overlay);
             }
             overlay.innerHTML = `${m.name}${m.location ? `<br/><span style="font-size:12px;opacity:.9">${m.location}</span>` : ''}`;
+            if (!card.dataset.addonBound) {
+                attachCardClick(card);
+                card.dataset.addonBound = '1';
+            }
         }
         for (; i < list.length; i++) {
-            const m = markets2[i];
+            const m = list[i];
             const card = document.createElement('article');
             card.className = 'card-lg';
             card.dataset.type = 'market';
@@ -156,20 +149,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <img src="Rectangle1.png" alt="" />
                 <div class="overlay">${m.name}${m.location ? `<br/><span style="font-size:12px;opacity:.9">${m.location}</span>` : ''}</div>
             `;
-            card.addEventListener('click', () => {
-                const goto = card.dataset.link || '#';
-                window.location.href = goto;
-            });
+            attachCardClick(card);
             track.appendChild(card);
         }
     }
-
     function renderPopularIntoBenefits(popular) {
         const ul = document.querySelector('.benefits');
         if (!ul) return;
         ul.removeAttribute('data-link');
         ul.innerHTML = '';
-        const list = Array.isArray(popular) ? popular.slice(0, 10) : [];
+        const list = Array.isArray(popular) ? popular.slice(0, 2) : [];
         if (list.length === 0) {
             ul.innerHTML = `
                 <li class="benefit">
@@ -190,7 +179,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <div class="b-text">
                     <strong>${p.name}</strong><br/>
                     <span class="sub">${p.category || '-'} · <b>${p.searchCount}</b>회 검색</span>
-                    <p>지금 가장 주목받는 상점이에요. <br /> 눌러서 상세 보러 가기!</p>
+                    <p>지금 가장 주목받는 상점이에요. <br />눌러서 상세 보러 가기!</p>
                 </div>
             `;
             li.addEventListener('click', () => {
@@ -200,7 +189,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             ul.appendChild(li);
         });
     }
-
     document.addEventListener('DOMContentLoaded', async () => {
         try {
             const [markets, popular] = await Promise.all([
@@ -214,4 +202,3 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     });
 })();
- 
