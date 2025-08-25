@@ -159,6 +159,8 @@ async function keywordFetch(foundKeyword) {
         const res = await fetch(`/api/stores/search?keyword=${foundKeyword}`);
         if (!res.ok) {
             console.log(res.status);
+        } else {
+            console.log("키워드 1 up");
         }
 
     } catch (error) {
@@ -178,16 +180,11 @@ const enterClick = () => {
     const foundKeywords = keywords.filter(keyword => input.value.includes(keyword));
 
     if (foundKeywords.length > 0) {
-        console.log("찾은 키워드:", foundKeywords);
-    } else {
-        console.log("키워드 없음");
+        foundKeywords.forEach(foundKeyword => {
+            keywordFetch(foundKeyword);
+            console.log(foundKeyword)
+        });
     }
-
-    foundKeywords.forEach(foundKeyword => {
-        // keywordFetch(foundKeyword);
-        console.log(foundKeyword)
-    });
-
 }
 
 
