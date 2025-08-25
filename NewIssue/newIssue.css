@@ -249,6 +249,7 @@ header p {
     width: 116px;
     border-radius: 14px;
     background: linear-gradient(188deg, rgba(0, 0, 0, 0.00) 24.51%, rgba(0, 0, 0, 0.80) 88.46%), url(<path-to-image>) lightgray 50% / cover no-repeat;
+    background-size: cover;
 }
 
 .issueText {
