@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <div class="b-text">
                     <strong>${p.name}</strong><br/>
                     <span class="sub">${p.category || '-'} · <b>${p.searchCount}</b>회 검색</span>
-                    <p>지금 가장 주목받는 상점이에요. 눌러서 상세 보러 가기!</p>
+                    <p>지금 가장 주목받는 상점이에요. <br /> 눌러서 상세 보러 가기!</p>
                 </div>
             `;
             li.addEventListener('click', () => {
