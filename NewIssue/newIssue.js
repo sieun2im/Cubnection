@@ -1,7 +1,29 @@
 const issuesPage = document.querySelector('.issuesPage');
 
 
+const cate = {
+    "정육점": "../img/meat.jpg",
+    "야채가게": "../img/greenFood.jpg",
+    "생선가게": "../img/fish.jpg",
+    "분식": "../img/boonsik.jpg",
+    "베이커리": "../img/bread.jpg",
+    "반찬가게": "../img/banchan.jpg",
+    "중식당": "../img/china.jpg",
+    "치킨": "../img/chicken,jpg",
+    "횟집": "../img/fishfood.jpg",
+    "한식": "../img/korea",
+    "떡집": "../img/ddok.jpg",
+}
 
+
+
+
+const cateImg = (issueImg, category) => {
+    if (category = "정육점") {
+        issueImg.setAttribute('src', "../img/meat.jpg");
+    }
+
+}
 
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -28,6 +50,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             issues.addEventListener('click', () => { window.location = `../../chatpage/chatpage.html?storeId=${encodeURIComponent(issue.id)}` });
 
             const issueImg = document.createElement('img');
+
+            cateImg(issueImg, issue.category);
             // issueImg.setAttribute('src',);
             issueImg.classList.add('issueImg');
 
