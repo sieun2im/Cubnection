@@ -19,7 +19,7 @@ const cate = {
 
 
 const cateImg = (issueImg, category) => {
-    if (category = "정육점") {
+    if (category === "정육점") {
         issueImg.setAttribute('src', "../img/meat.jpg");
     }
 
