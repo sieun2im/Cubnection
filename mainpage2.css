@@ -47,7 +47,7 @@
     -webkit-overflow-scrolling: touch;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    padding: 0 20px 100px;
+    padding: 0 20px 110px;
     }
     .scroll-area::-webkit-scrollbar { display: none; }
 
