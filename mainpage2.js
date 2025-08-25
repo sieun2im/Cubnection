@@ -25,7 +25,7 @@ function getStep() {
     return w + gap;
 }
 function maxIndex() {
-    return Math.max(0, cards.length - 1); 
+    return Math.max(0, cards.length - 1);
 }
 function getMaxScrollLeft() {
     if (!track) return 0;
@@ -78,9 +78,22 @@ function switchTab(btn, type) {
         window.location.href = 'mainpage2.html';
     }
 }
-
 (() => {
     const API_BASE = '/api';
+    function cateImgSrc(category) {
+        if (category === "정육점") return "../img/meat1.jpg";
+        else if (category === "야채가게") return "../img/greenFood.jpg";
+        else if (category === "생선가게") return "../img/fish.jpg";
+        else if (category === "분식") return "../img/boonsik.jpg";
+        else if (category === "베이커리") return "../img/bread.jpg";
+        else if (category === "반찬가게") return "../img/banchan.jpg";
+        else if (category === "중식당") return "../img/china.jpg";
+        else if (category === "치킨") return "../img/chicken.jpg";
+        else if (category === "횟집") return "../img/fishfood.jpg";
+        else if (category === "한식") return "../img/korea.jpg";
+        else if (category === "떡집") return "../img/ddok.jpg";
+        return "Rectangle1.png";
+    }
     async function api(url, opts) {
         const res = await fetch(url, opts);
         if (!res.ok) {
@@ -92,7 +105,6 @@ function switchTab(btn, type) {
     const fetchMarkets = () => api(`${API_BASE}/markets`);
     const fetchPopular = () => api(`${API_BASE}/stores/popular`);
     const getStoreDetail = (id) => api(`${API_BASE}/stores/${id}`);
-
     function hydrateMarketsIntoCarousel(markets) {
         const track = document.querySelector('.track');
         if (!track) return;
@@ -141,7 +153,6 @@ function switchTab(btn, type) {
             track.appendChild(card);
         }
     }
-
     function renderPopularIntoBenefits(popular) {
         const ul = document.querySelector('.benefits');
         if (!ul) return;
@@ -158,12 +169,13 @@ function switchTab(btn, type) {
                 </li>`;
             return;
         }
-        list.forEach((p, idx) => {
+        list.forEach((p) => {
             const li = document.createElement('li');
             li.className = 'benefit';
             li.dataset.storeId = String(p.id);
+            const imgSrc = cateImgSrc(p.category || '');
             li.innerHTML = `
-                <img src="Rectangle${(idx % 8) + 1}.png" alt="" />
+                <img src="${imgSrc}" alt="" />
                 <div class="b-text">
                     <strong>${p.name}</strong><br/>
                     <span class="sub">${p.category || '-'} · <b>${p.searchCount}</b>회 검색</span>
@@ -177,7 +189,6 @@ function switchTab(btn, type) {
             ul.appendChild(li);
         });
     }
-
     document.addEventListener('DOMContentLoaded', async () => {
         try {
             const [markets, popular] = await Promise.all([
