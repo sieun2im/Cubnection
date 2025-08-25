@@ -75,12 +75,14 @@ function switchTab(btn, type) {
     else if (type === '재래시장') window.location.href = 'mainpage2.html';
 }
 
+let markets2;
+
 document.addEventListener("DOMContentLoaded", async function () {
     try {
         const res = await fetch(`/api/markets`);
         if (res.ok) {
             const markets = await res.json();
-            const marketss = markets.slice(3,6);
+            markets2 = markets.slice(3,6);
             console.log(markets);
             console.log(marketss);
         } else {
@@ -144,7 +146,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             overlay.innerHTML = `${m.name}${m.location ? `<br/><span style="font-size:12px;opacity:.9">${m.location}</span>` : ''}`;
         }
         for (; i < list.length; i++) {
-            const m = list[i];
+            const m = markets2[i];
             const card = document.createElement('article');
             card.className = 'card-lg';
             card.dataset.type = 'market';
