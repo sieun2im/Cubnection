@@ -1,26 +1,30 @@
 const issuesPage = document.querySelector('.issuesPage');
 
 
-const cate = {
-    "정육점": "../img/meat.jpg",
-    "야채가게": "../img/greenFood.jpg",
-    "생선가게": "../img/fish.jpg",
-    "분식": "../img/boonsik.jpg",
-    "베이커리": "../img/bread.jpg",
-    "반찬가게": "../img/banchan.jpg",
-    "중식당": "../img/china.jpg",
-    "치킨": "../img/chicken,jpg",
-    "횟집": "../img/fishfood.jpg",
-    "한식": "../img/korea",
-    "떡집": "../img/ddok.jpg",
-}
-
-
-
 
 const cateImg = (issueImg, category) => {
     if (category === "정육점") {
         issueImg.setAttribute('src', "../img/meat.jpg");
+    } else if (category === "야채가게") {
+        issueImg.setAttribute('src', "../img/greenFood.jpg");
+    } else if (category === "생선가게") {
+        issueImg.setAttribute('src', "../img/fish.jpg");
+    } else if (category === "분식") {
+        issueImg.setAttribute('src', "../img/boonsik.jpg");
+    } else if (category === "베이커리") {
+        issueImg.setAttribute('src', "../img/bread.jpg");
+    } else if (category === "반찬가게") {
+        issueImg.setAttribute('src', "../img/banchan.jpg");
+    } else if (category === "중식당") {
+        issueImg.setAttribute('src', "../img/china.jpg");
+    } else if (category === "치킨") {
+        issueImg.setAttribute('src', "../img/chicken,jpg");
+    } else if (category === "횟집") {
+        issueImg.setAttribute('src', "../img/fishfood.jpg");
+    } else if (category === "한식") {
+        issueImg.setAttribute('src', "../img/korea.jpg");
+    } else if (category === "떡집") {
+        issueImg.setAttribute('src', "../img/ddok.jpg");
     }
 
 }
