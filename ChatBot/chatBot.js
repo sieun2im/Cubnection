@@ -104,6 +104,7 @@ async function enterP(e) {
             chatP.classList.remove('none');
         }
         createC();
+        enterClick();
 
 
         //springAI
@@ -148,6 +149,46 @@ async function enterP(e) {
 
     }
 }
+
+
+
+
+async function keywordFetch(foundKeyword) {
+
+    try {
+        const res = await fetch(`/api/stores/search?keyword=${foundKeyword}`);
+        if (!res.ok) {
+            console.log(res.status);
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+
+
+}
+
+const keywords = [
+    "짜장면", "짬뽕", "탕수육", "중식", "칼국수", "국수", "냉면",
+    "회", "초밥", "스시", "분식", "떡볶이", "순대", "튀김", "김밥",
+    "치킨", "피자", "햄버거", "빵", "베이커리", "떡", "전", "반찬"
+];
+
+const enterClick = () => {
+    const foundKeywords = keywords.filter(keyword => input.value.includes(keyword));
+
+    if (foundKeywords.length > 0) {
+        console.log("찾은 키워드:", foundKeywords);
+    } else {
+        console.log("키워드 없음");
+    }
+
+    foundKeywords.forEach(foundKeyword => {
+        keywordFetch(foundKeyword);
+    });
+
+}
+
 
 //추천질문 응답 API
 async function clickQBtn(e) {
